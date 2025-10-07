@@ -12,6 +12,7 @@ public class Paddle extends MovableObject {
 
     public Paddle(){}
 
+
     public int  getSpeed() {
         return speed;
     }
@@ -36,5 +37,11 @@ public class Paddle extends MovableObject {
     public void applyPowerUp() {
 
     }
+
+    @Override
+    public void move() {
+
+    }
+
 
 }

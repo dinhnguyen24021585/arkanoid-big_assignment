@@ -33,4 +33,14 @@ public class PowerUp extends GameObject{
 
     }
 
+    @Override
+    public void update() {
+
+    }
+
+    @Override
+    public void render() {
+
+    }
+
 }

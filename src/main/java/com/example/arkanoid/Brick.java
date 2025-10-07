@@ -11,6 +11,8 @@ public class Brick  extends GameObject {
 
     public Brick() {}
 
+
+
     public int getHitPoints() {
         return hitPoints;
     }
@@ -32,6 +34,16 @@ public class Brick  extends GameObject {
     }
 
     public void isDestroyed() {
+
+    }
+
+    @Override
+    public void update() {
+
+    }
+
+    @Override
+    public void render() {
 
     }
 }

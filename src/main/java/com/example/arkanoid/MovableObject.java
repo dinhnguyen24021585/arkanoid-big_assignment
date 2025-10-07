@@ -27,6 +27,6 @@ public abstract class MovableObject {
         this.dy = dy;
     }
 
-    public void move(){}
+    public abstract void move();
 
 }

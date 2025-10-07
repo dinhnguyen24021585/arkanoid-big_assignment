@@ -1,9 +1,17 @@
 package com.example.arkanoid;
 
+import javax.swing.*;
+//import java.awt.*;
+import javafx.scene.image.*;
+
 public class Ball extends MovableObject {
     private int speed;
     private int directionX;
     private int directionY;
+
+    private Image image = new Image("image/ball.png");
+
+    public Ball(int speed, int directionX, int directionY, Image image) {}
 
     public Ball(int speed, int directionX, int directionY){
         this.speed = speed;
@@ -39,6 +47,11 @@ public class Ball extends MovableObject {
     }
 
     public void checkCollision(GameObject other){
+
+    }
+
+    @Override
+    public void move() {
 
     }
 }

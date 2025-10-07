@@ -49,7 +49,7 @@ public abstract class  GameObject {
         this.height = height;
     }
 
-    public void update(){}
+    public abstract void update();
 
-    public void render(){}
+    public abstract void render();
 }
