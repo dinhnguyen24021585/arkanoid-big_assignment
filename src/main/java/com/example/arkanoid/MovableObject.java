@@ -1,6 +1,6 @@
 package com.example.arkanoid;
 
-public abstract class MovableObject {
+public abstract class MovableObject extends GameObject{
     private int dx;
     private int dy;
 

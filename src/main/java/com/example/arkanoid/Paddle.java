@@ -12,6 +12,16 @@ public class Paddle extends MovableObject {
 
     public Paddle(){}
 
+    @Override
+    public void update() {
+
+    }
+
+    @Override
+    public void render() {
+
+    }
+
 
     public int  getSpeed() {
         return speed;

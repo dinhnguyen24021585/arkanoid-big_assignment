@@ -54,4 +54,14 @@ public class Ball extends MovableObject {
     public void move() {
 
     }
+
+    @Override
+    public void update() {
+
+    }
+
+    @Override
+    public void render() {
+
+    }
 }
