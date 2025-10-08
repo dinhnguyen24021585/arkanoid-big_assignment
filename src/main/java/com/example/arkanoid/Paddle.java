@@ -19,6 +19,17 @@ public class Paddle extends MovableObject {
         this.image = new Image(getClass().getResourceAsStream("/com/example/arkanoid/Image/paddle.png"));
     }
     
+
+    public Paddle(){}
+
+    public int  getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+
     public int getCurrentPowerUp() {
         return currentPowerUp;
     }

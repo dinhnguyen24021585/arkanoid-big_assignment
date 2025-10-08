@@ -100,13 +100,4 @@ public class Ball extends MovableObject {
         Renderer.getInstance().render(this);
     }
 
-    @Override
-    public void update() {
-
-    }
-
-    @Override
-    public void render() {
-
-    }
 }
