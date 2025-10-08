@@ -18,7 +18,7 @@ public class Paddle extends MovableObject {
         this.currentPowerUp = 0;
         this.image = new Image(getClass().getResourceAsStream("/com/example/arkanoid/Image/paddle.png"));
     }
-
+    
     public int getCurrentPowerUp() {
         return currentPowerUp;
     }
