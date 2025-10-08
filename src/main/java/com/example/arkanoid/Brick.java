@@ -17,7 +17,7 @@ public class Brick  extends GameObject {
     }
 
     public Brick() {
-        super(0, 0, 60, 20); // vị trí (0,0), kích thước mặc định 60x20
+        super(0, 0, 60, 20);
         this.hitPoints = 1;
         this.type = 1;
     }
