@@ -1,5 +1,7 @@
 package com.example.arkanoid;
 
+import javafx.scene.canvas.GraphicsContext;
+
 public class PowerUp extends GameObject{
     private int type;
     private int duration;
@@ -42,5 +44,4 @@ public class PowerUp extends GameObject{
     public void render() {
 
     }
-
 }
