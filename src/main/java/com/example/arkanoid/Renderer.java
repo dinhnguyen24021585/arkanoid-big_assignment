@@ -37,6 +37,16 @@ public class Renderer {
                     ball.getWidth(),
                     ball.getHeight()
             );
+        } else if (obj instanceof Brick brick) {
+            if (!brick.isDestroyed()) {
+                gc.drawImage(
+                        brick.getImage(),
+                        brick.getX(),
+                        brick.getY(),
+                        brick.getWidth(),
+                        brick.getHeight()
+                );
+            }
         }
     }
 

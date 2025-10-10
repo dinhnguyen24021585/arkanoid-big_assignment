@@ -10,7 +10,7 @@ public class Paddle extends MovableObject {
     private final int SCREEN_WIDTH = 800;
 
     public Paddle(int x, int y, int width, int height) {
-        super();
+        super(0, 0);
         setX(x);
         setY(y);
         setWidth(width);
@@ -18,8 +18,6 @@ public class Paddle extends MovableObject {
         this.currentPowerUp = 0;
         this.image = new Image(getClass().getResourceAsStream("/com/example/arkanoid/Image/paddle.png"));
     }
-
-    public Paddle(){}
 
     public int getCurrentPowerUp() {
         return currentPowerUp;
@@ -44,7 +42,6 @@ public class Paddle extends MovableObject {
     @Override
     public void move() {
         setX(getX());
-        setY(getY());
     }
 
     @Override
