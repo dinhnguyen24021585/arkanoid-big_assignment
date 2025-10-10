@@ -1,47 +1,38 @@
 package com.example.arkanoid;
 
-import javafx.scene.canvas.GraphicsContext;
+public abstract class PowerUp extends GameObject {
+    protected boolean active;
+    protected int duration;
 
-public class PowerUp extends GameObject{
-    private int type;
-    private int duration;
-    public PowerUp(int type, int duration) {
-        this.type = type;
-        this.duration = duration;
+    public PowerUp(int x, int y, int width, int height) {
+        super(x, y, width, height);
+        this.active = true;
+        this.duration = 5000;
     }
-    public PowerUp() {}
 
-    public int getType() {
-        return type;
+    public abstract void applyEffect(Paddle paddle);
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public int getDuration() {
         return duration;
     }
 
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    public void setDuration(int duration) {
-        this.duration = duration;
-    }
-
-    public void applyEffect() {
-
-    }
-
-    public void removeEffect() {
-
-    }
-
     @Override
     public void update() {
-
+        setY(getY() + 2);
     }
 
     @Override
     public void render() {
-
+        if (active) {
+            Renderer.getInstance().render(this);
+        }
     }
 }
