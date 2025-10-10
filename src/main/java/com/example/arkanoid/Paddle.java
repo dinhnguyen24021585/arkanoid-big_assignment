@@ -9,7 +9,7 @@ public class Paddle extends MovableObject {
 
     private final int SCREEN_WIDTH = 800;
 
-    public Paddle(int x, int y, int width, int height, int speed) {
+    public Paddle(int x, int y, int width, int height) {
         super(0, 0);
         setX(x);
         setY(y);
