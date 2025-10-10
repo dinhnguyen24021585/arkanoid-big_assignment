@@ -1,49 +1,74 @@
 package com.example.arkanoid;
 
-public class Brick  extends GameObject {
-    private int hitPoints;
-    private int type;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.*;
 
-    public Brick(int hitPoints, int type) {
+public class Brick  extends GameObject {
+    protected int hitPoints;
+    protected int type;
+    protected boolean destroyed = false;
+    protected Image image;
+
+    public Brick(int x, int y, int width, int height, int hitPoints, int type) {
+        super(x, y, width, height);
         this.hitPoints = hitPoints;
         this.type = type;
+        loadImage();
     }
 
-    public Brick() {}
+    public Brick() {
+        this(0, 0, 60, 20, 1, 1);
+    }
 
-
+    private void loadImage() {
+        String path = "/com/example/arkanoid/Image/brick" + hitPoints + ".png";
+        image = new Image(getClass().getResourceAsStream(path));
+    }
 
     public int getHitPoints() {
         return hitPoints;
-    }
-
-    public int getType() {
-        return type;
     }
 
     public void setHitPoints(int hitPoints) {
         this.hitPoints = hitPoints;
     }
 
+    public int getType() {
+        return type;
+    }
+
     public void setType(int type) {
         this.type = type;
     }
 
-    public void takeHits() {
-
+    public Image getImage() {
+        return image;
     }
 
-    public void isDestroyed() {
+    public void takeHits() {
+        if (!destroyed) {
+            hitPoints--;
+            if (hitPoints <= 0) {
+                destroyed = true;
+            } else {
+                loadImage();
+            }
+        }
+    }
 
+    public boolean isDestroyed() {
+        return destroyed;
     }
 
     @Override
     public void update() {
-
+        
     }
 
     @Override
     public void render() {
-
+        if (!destroyed) {
+            Renderer.getInstance().render(this);
+        }
     }
 }

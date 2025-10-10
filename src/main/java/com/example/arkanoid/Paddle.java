@@ -4,32 +4,22 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.*;
 
 public class Paddle extends MovableObject {
-    private int speed;
     private int currentPowerUp;
     private Image image;
 
     private final int SCREEN_WIDTH = 800;
 
-    public Paddle(int x, int y, int width, int height, int speed) {
-        super(0, 0);
+    public Paddle(int x, int y, int width, int height) {
+        super();
         setX(x);
         setY(y);
         setWidth(width);
         setHeight(height);
-        this.speed = speed;
         this.currentPowerUp = 0;
         this.image = new Image(getClass().getResourceAsStream("/com/example/arkanoid/Image/paddle.png"));
     }
 
     public Paddle(){}
-
-    public int  getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(int speed) {
-        this.speed = speed;
-    }
 
     public int getCurrentPowerUp() {
         return currentPowerUp;
@@ -47,26 +37,14 @@ public class Paddle extends MovableObject {
         this.image = image;
     }
 
-    public void moveLeft() {
-        setX(getX() - speed);
-        if (getX() < 0) setX(0);
-    }
-
-    public void moveRight() {
-        setX(getX() + speed);
-        if (getX() + getWidth() > SCREEN_WIDTH) {
-            setX(SCREEN_WIDTH - getWidth());
-        }
-    }
-
     public void applyPowerUp() {
 
     }
 
     @Override
     public void move() {
-        setX(getX() + getDx());
-        setY(getY() + getDy());
+        setX(getX());
+        setY(getY());
     }
 
     @Override
