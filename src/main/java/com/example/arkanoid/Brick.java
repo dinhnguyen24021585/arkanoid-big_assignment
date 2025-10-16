@@ -62,7 +62,7 @@ public class Brick  extends GameObject {
 
     @Override
     public void update() {
-        
+
     }
 
     @Override

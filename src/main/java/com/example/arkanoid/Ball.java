@@ -9,6 +9,7 @@ public class Ball extends MovableObject {
     private int speed;
     private int directionX;
     private int directionY;
+    private boolean ballMoving = false;
     private Image image;
 
     public Ball(int x, int y, int width, int height, int speed, int directionX, int directionY) {
@@ -28,7 +29,7 @@ public class Ball extends MovableObject {
     }
 
     public int getSpeed() {
-        return speed;
+        return this.speed;
     }
 
     public void setSpeed(int speed) {
@@ -36,7 +37,7 @@ public class Ball extends MovableObject {
     }
 
     public int getDirectionX() {
-        return directionX;
+        return this.directionX;
     }
 
     public void setDirectionX(int directionX) {
@@ -44,15 +45,23 @@ public class Ball extends MovableObject {
     }
 
     public int getDirectionY() {
-        return directionY;
+        return this.directionY;
     }
 
     public void setDirectionY(int directionY) {
         this.directionY = directionY;
     }
 
+    public boolean isBallMoving() {
+        return ballMoving;
+    }
+
+    public void setBallMoving(boolean ballMoving) {
+        this.ballMoving = ballMoving;
+    }
+
     public Image getImage() {
-        return image;
+        return this.image;
     }
 
     public void setImage(Image image) {
@@ -69,25 +78,46 @@ public class Ball extends MovableObject {
         setDy(directionY * speed);
     }
 
-    public void bounceOff(GameObject other){
-        if (getY() + getHeight() - getDy() <= other.getY() || getY() - getDy() >= other.getY() + other.getHeight()) {
+    public void bounceOff(GameObject other) {
+        if (getY() + getHeight() - getDy() <= other.getY() || getY() - getDy() >= other.getY() + other.getHeight()){
             reverseY();
-        } else {
+        } else if (getX() + getWidth() - getDx() <= other.getX() || getX() - getDx() >= other.getX() + other.getWidth()) {
             reverseX();
         }
     }
 
-    public void checkCollision(GameObject other){
+    public void boundBorder() {
+        if (getY() == 0 || getY() + 50 == 600) {
+            reverseY();
+        }
+        if (getX() == 0 || getX() + 50 == 800) {
+            System.out.println(getX());
+            reverseX();
+        }
+    }
+
+    public void checkCollision(GameObject other) {
         if (getX() < other.getX() + other.getWidth() && getX() + getWidth() > other.getX()
                 && getY() < other.getY() + other.getHeight() && getY() + getHeight() > other.getY()) {
             bounceOff(other);
+            if (other instanceof Brick brick) {
+                if (brick.getHitPoints() != Integer.MAX_VALUE) brick.takeHits();
+            }
         }
     }
 
     @Override
     public void move() {
-        setX(getX() + getDx());
-        setY(getY() + getDy());
+        if (getX() + getDx() >= 0 && getX() + getDx() <= 800) {
+            setX(getX() + getDx());
+        } else {
+            setX(0);
+        }
+        if (getY() + getDy() >= 0 && getY() + getDy() <= 600) {
+            setY(getY() + getDy());
+        } else {
+            setY(0);
+        }
     }
 
     @Override
