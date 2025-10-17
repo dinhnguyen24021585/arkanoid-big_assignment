@@ -1,6 +1,7 @@
 package com.example.arkanoid;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -23,8 +24,8 @@ public class Level {
         this.level = level;
     }
 
-    public void loadLevel(ArrayList<Brick> bricks) throws IOException {
-        List<String> lines = Files.readAllLines(Paths.get("D:/Code/arkanoid-big_assignment/src/main/resources/com/example/arkanoid/Levels/level" + this.level + ".txt"));
+    public void loadLevel(ArrayList<Brick> bricks) throws IOException, URISyntaxException {
+        List<String> lines = Files.readAllLines(Paths.get(getClass().getResource("/com/example/arkanoid/Levels/level" + this.level + ".txt").toURI()));
         for (int  i = 0; i < lines.size(); i++) {
             Scanner scanner = new Scanner(lines.get(i));
             int k = 0;

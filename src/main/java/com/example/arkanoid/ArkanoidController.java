@@ -10,6 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 //import static com.sun.scenario.effect.impl.prism.PrEffectHelper.render;
@@ -24,7 +25,7 @@ public class ArkanoidController {
 
     private GameEngine gameEngine = new GameEngine();
 
-    public void initialize() throws IOException {
+    public void initialize() throws IOException, URISyntaxException {
 
         gc = gameCanvas.getGraphicsContext2D();
         Renderer.getInstance().setGraphicsContext(gc);
@@ -45,7 +46,7 @@ public class ArkanoidController {
                 } else {
                     try {
                         gameEngine.startGame();
-                    } catch (IOException e) {
+                    } catch (IOException | URISyntaxException e) {
                         throw new RuntimeException(e);
                     }
                 }
