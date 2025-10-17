@@ -6,6 +6,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 public class GameEngine {
@@ -91,7 +92,7 @@ public class GameEngine {
         this.gameState = gameState;
     }
 
-    public void startGame() throws IOException {
+    public void startGame() throws IOException, URISyntaxException {
         Paddle paddle = new Paddle(300, 500, 200, 50);
         setPaddle(paddle);
         this.paddle.render();
