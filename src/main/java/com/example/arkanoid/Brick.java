@@ -20,8 +20,8 @@ public class Brick  extends GameObject {
         this(0, 0, 60, 20, 1, 1);
     }
 
-    private void loadImage() {
-        String path = "/com/example/arkanoid/Image/brick" + hitPoints + ".png";
+    protected void loadImage() {
+        String path = "/com/example/arkanoid/Image/brick" + type + ".png";
         image = new Image(getClass().getResourceAsStream(path));
     }
 
@@ -45,15 +45,17 @@ public class Brick  extends GameObject {
         return image;
     }
 
-    public void takeHits() {
+    public int takeHits() {
         if (!destroyed) {
-            hitPoints--;
-            if (hitPoints <= 0) {
+            type--;
+            if (type <= 0) {
                 destroyed = true;
+                return hitPoints;
             } else {
                 loadImage();
             }
         }
+        return 0;
     }
 
     public boolean isDestroyed() {
