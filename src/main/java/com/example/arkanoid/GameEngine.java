@@ -1,5 +1,12 @@
 package com.example.arkanoid;
 
+import javafx.animation.AnimationTimer;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.MouseEvent;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 public class GameEngine {
@@ -10,6 +17,15 @@ public class GameEngine {
     private int score;
     private int lives;
     private int gameState;
+
+    public GameEngine() {
+    }
+
+    public GameEngine(Paddle paddle, Ball ball) {
+        this.paddle = paddle;
+        this.ball = ball;
+    }
+
     public GameEngine(Paddle paddle, Ball ball, ArrayList<Brick> bricks, ArrayList<PowerUp> powerUps, int score, int lives, int gameState) {
         this.paddle = paddle;
         this.ball = ball;
@@ -76,23 +92,64 @@ public class GameEngine {
         this.gameState = gameState;
     }
 
-    public void startGame() {
+    public void startGame() throws IOException, URISyntaxException {
+        Paddle paddle = new Paddle(300, 500, 200, 50);
+        setPaddle(paddle);
+        this.paddle.render();
+
+        Ball ball = new Ball(375, 450, 50, 50, 5, 1, 1);
+        setBall(ball);
+        this.ball.render();
+
+
+        ArrayList<Brick> bricks = new ArrayList<Brick>();
+        Level level = new Level(1);
+        setBricks(bricks);
+        level.loadLevel(bricks);
+        this.bricks.forEach(b -> b.render());
 
     }
 
     public void updateGame() {
+        if (this.paddle.isPaddleSliding()) {
+            this.paddle.update();
+            this.paddle.render();
+        }
+        if (this.ball.isBallMoving()) {
+            this.ball.update();
+            this.ball.render();
+        }
 
+        ArrayList<Brick> bricktoRemove = new ArrayList<Brick>();
+        this.bricks.forEach(b -> b.update());
+        this.bricks.forEach(b -> {
+            if (!b.isDestroyed()) b.render();
+            else {
+                bricktoRemove.add(b);
+            }
+        });
+        this.bricks.removeAll(bricktoRemove);
     }
 
-    public void handleInput() {
-
+    public void handleInput(Canvas gameCanvas) {
+        gameCanvas.setOnMouseClicked(MouseEvent -> {
+            ball.setBallMoving(true);
+            paddle.setPaddleSliding(true);
+        });
+        gameCanvas.setOnMouseMoved(MouseEvent -> {
+            if (MouseEvent.getX() - 100 >= 0 && MouseEvent.getX() + 100 < gameCanvas.getWidth()) {
+                if (paddle.isPaddleSliding()) paddle.setX((int) MouseEvent.getX() - 100);
+            }
+        });
     }
 
     public void checkCollision() {
-
+        ball.checkCollision(paddle);
+        bricks.forEach(b -> ball.checkCollision(b));
+        ball.boundBorder();
     }
 
-    public void gameOver() {
-
+    public boolean gameOver() {
+        return this.ball.getY() >= 550;
     }
 }

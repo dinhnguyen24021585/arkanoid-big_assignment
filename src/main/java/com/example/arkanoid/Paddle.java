@@ -5,6 +5,7 @@ import javafx.scene.image.*;
 
 public class Paddle extends MovableObject {
     private int currentPowerUp;
+    private boolean isPaddleSliding = false;
     private Image image;
 
     private final int SCREEN_WIDTH = 800;
@@ -25,6 +26,14 @@ public class Paddle extends MovableObject {
 
     public void setCurrentPowerUp(int currentPowerUp) {
         this.currentPowerUp = currentPowerUp;
+    }
+
+    public boolean isPaddleSliding() {
+        return isPaddleSliding;
+    }
+
+    public void setPaddleSliding(boolean paddleSliding) {
+        isPaddleSliding = paddleSliding;
     }
 
     public Image getImage() {
