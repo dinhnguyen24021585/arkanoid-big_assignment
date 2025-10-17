@@ -47,6 +47,27 @@ public class Renderer {
                         brick.getHeight()
                 );
             }
+        } else if ( obj instanceof PowerUp powerUp) {
+            if (powerUp.isActive()) {
+                if (powerUp instanceof ExpandPaddlePowerUp expandPowerUp) {
+                    gc.drawImage(
+                            expandPowerUp.getImage(),
+                            powerUp.getX(),
+                            powerUp.getY(),
+                            powerUp.getWidth(),
+                            powerUp.getHeight()
+                    );
+                }
+                else if ( powerUp instanceof FastBallPowerUp fastBallPowerUp) {
+                    gc.drawImage(
+                            fastBallPowerUp.getImage(),
+                            powerUp.getX(),
+                            powerUp.getY(),
+                            powerUp.getWidth(),
+                            powerUp.getHeight()
+                    );
+                }
+            }
         }
     }
 
