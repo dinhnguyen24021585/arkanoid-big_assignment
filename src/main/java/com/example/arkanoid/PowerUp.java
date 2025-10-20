@@ -17,8 +17,8 @@ public abstract class PowerUp extends GameObject {
         this.effectActive = false;
     }
 
-    public abstract void applyEffect(GameEngine gameEngine);
-    public abstract void removeEffect(GameEngine gameEngine);
+    public abstract void applyEffect();
+    public abstract void removeEffect();
 
     public boolean isEffectExpired() {
         if (effectStartTime == 0) return false;
@@ -34,20 +34,20 @@ public abstract class PowerUp extends GameObject {
 
     public boolean checkPaddleCollision(Paddle paddle) {
         if (!active || paddle == null) return false;
-        return this.intersects(paddle);
+        return paddle.checkCollision(paddle);
     }
 
     public void activate(GameEngine gameEngine) {
         if (effectApplied) return;
 
-        applyEffect(gameEngine);
+        applyEffect();
         startEffectTimer();
     }
 
     public void deactivate(GameEngine gameEngine) {
         if (!effectActive) return;
 
-        removeEffect(gameEngine);
+        removeEffect();
         effectActive = false;
         effectApplied = false;
         effectStartTime = 0;

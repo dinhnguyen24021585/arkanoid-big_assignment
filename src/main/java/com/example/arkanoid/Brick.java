@@ -3,7 +3,7 @@ package com.example.arkanoid;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.*;
 
-public class Brick  extends GameObject {
+public abstract class Brick  extends GameObject {
     protected int hitPoints;
     protected int type;
     protected boolean destroyed = false;
@@ -45,18 +45,7 @@ public class Brick  extends GameObject {
         return image;
     }
 
-    public int takeHits() {
-        if (!destroyed) {
-            type--;
-            if (type <= 0) {
-                destroyed = true;
-                return hitPoints;
-            } else {
-                loadImage();
-            }
-        }
-        return 0;
-    }
+    public abstract int takeHits();
 
     public boolean isDestroyed() {
         return destroyed;

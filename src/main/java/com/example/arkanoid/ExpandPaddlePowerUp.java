@@ -12,10 +12,10 @@ public class ExpandPaddlePowerUp extends PowerUp {
     }
 
     @Override
-    public void applyEffect(GameEngine gameEngine) {
-        if (gameEngine == null || gameEngine.getPaddle() == null || effectApplied) return;
+    public void applyEffect() {
+        if (GameEngine.getPaddle() == null || effectApplied) return;
 
-        Paddle paddle = gameEngine.getPaddle();
+        Paddle paddle = GameEngine.getPaddle();
         if (originalWidth == null) {
             this.originalWidth = paddle.getWidth();
         }
@@ -33,10 +33,10 @@ public class ExpandPaddlePowerUp extends PowerUp {
     }
 
     @Override
-    public void removeEffect(GameEngine gameEngine) {
-        if (gameEngine == null || gameEngine.getPaddle() == null || !isEffectActive()) return;
+    public void removeEffect() {
+        if (GameEngine.getPaddle() == null || !isEffectActive()) return;
 
-        Paddle paddle = gameEngine.getPaddle();
+        Paddle paddle = GameEngine.getPaddle();
         if (originalWidth != null) {
             int centerX = paddle.getX() + (paddle.getWidth() / 2);
             paddle.setX(centerX - (originalWidth / 2));

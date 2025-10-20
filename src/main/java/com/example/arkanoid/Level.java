@@ -26,7 +26,7 @@ public class Level {
 
     public void loadLevel(ArrayList<Brick> bricks) throws IOException, URISyntaxException {
         List<String> lines = Files.readAllLines(Paths.get(getClass().getResource("/com/example/arkanoid/Levels/level" + this.level + ".txt").toURI()));
-        for (int  i = 0; i < lines.size(); i++) {
+        for (int i = 0; i < lines.size(); i++) {
             Scanner scanner = new Scanner(lines.get(i));
             int k = 0;
             while (scanner.hasNextInt()) {
@@ -35,10 +35,19 @@ public class Level {
             }
         }
 
-        for(int i = 0; i < 4; i++) {
-            for(int j = 0; j < 10; j++) {
-                if (isBricksShown[i][j] >= 1) {
-                    Brick brick = new Brick(80 * j, 30 * i, 80, 30, isBricksShown[i][j], isBricksShown[i][j]);
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 10; j++) {
+                if (isBricksShown[i][j] == 1) {
+                    Brick brick = new NormalBrick(80 * j, 30 * i);
+                    bricks.add(brick);
+                } else if (isBricksShown[i][j] > 1 && isBricksShown[i][j] <= 3) {
+                    Brick brick = new StrongBrick(80 * j, 30 * i, isBricksShown[i][j], isBricksShown[i][j]);
+                    bricks.add(brick);
+                } else if (isBricksShown[i][j] == -1) {
+                    Brick brick = new ExplosiveBrick(80 * j, 30 * i);
+                    bricks.add(brick);
+                } else if (isBricksShown[i][j] == Integer.MAX_VALUE) {
+                    Brick brick = new UnbreakableBrick(80 * j, 30 * i);
                     bricks.add(brick);
                 }
             }

@@ -44,9 +44,19 @@ public class Paddle extends MovableObject {
         this.image = image;
     }
 
+    public boolean checkCollision(GameObject other) {
+        if (getX() < other.getX() + other.getWidth() && getX() + getWidth() > other.getX()
+                && getY() < other.getY() + other.getHeight() && getY() + getHeight() > other.getY()) {
+            return true;
+        }
+        return false;
+    }
+
     public void applyPowerUp() {
 
     }
+
+
 
     @Override
     public void move() {

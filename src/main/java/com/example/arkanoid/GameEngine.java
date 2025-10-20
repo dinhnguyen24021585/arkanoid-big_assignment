@@ -10,10 +10,10 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 public class GameEngine {
-    private Paddle paddle;
-    private Ball ball;
-    private ArrayList<Brick> bricks = new ArrayList<Brick>();
-    private ArrayList<PowerUp> powerUps = new ArrayList<PowerUp>();
+    private static Paddle paddle;
+    private static Ball ball;
+    private static ArrayList<Brick> bricks = new ArrayList<Brick>();
+    private static ArrayList<PowerUp> powerUps = new ArrayList<PowerUp>();
     private int score;
     private int lives;
     private int gameState;
@@ -22,50 +22,50 @@ public class GameEngine {
     }
 
     public GameEngine(Paddle paddle, Ball ball) {
-        this.paddle = paddle;
-        this.ball = ball;
+        GameEngine.paddle = paddle;
+        GameEngine.ball = ball;
     }
 
     public GameEngine(Paddle paddle, Ball ball, ArrayList<Brick> bricks, ArrayList<PowerUp> powerUps, int score, int lives, int gameState) {
-        this.paddle = paddle;
-        this.ball = ball;
-        this.bricks = bricks;
-        this.powerUps = powerUps;
+        GameEngine.paddle = paddle;
+        GameEngine.ball = ball;
+        GameEngine.bricks = bricks;
+        GameEngine.powerUps = powerUps;
         this.score = score;
         this.lives = lives;
         this.gameState = gameState;
     }
 
-    public Paddle getPaddle() {
+    public static Paddle getPaddle() {
         return paddle;
     }
 
-    public void setPaddle(Paddle paddle) {
-        this.paddle = paddle;
+    public static void setPaddle(Paddle paddle) {
+        GameEngine.paddle = paddle;
     }
 
-    public Ball getBall() {
+    public static Ball getBall() {
         return ball;
     }
 
-    public void setBall(Ball ball) {
-        this.ball = ball;
+    public static void setBall(Ball ball) {
+        GameEngine.ball = ball;
     }
 
-    public ArrayList<Brick> getBricks() {
-        return bricks;
+    public static ArrayList<Brick> getBricks() {
+        return GameEngine.bricks;
     }
 
-    public void setBricks(ArrayList<Brick> bricks) {
-        this.bricks = bricks;
+    public static void setBricks(ArrayList<Brick> bricks) {
+        GameEngine.bricks = bricks;
     }
 
-    public ArrayList<PowerUp> getPowerUps() {
+    public static ArrayList<PowerUp> getPowerUps() {
         return powerUps;
     }
 
-    public void setPowerUps(ArrayList<PowerUp> powerUps) {
-        this.powerUps = powerUps;
+    public static void setPowerUps(ArrayList<PowerUp> powerUps) {
+        GameEngine.powerUps = powerUps;
     }
 
     public int getScore() {
@@ -95,40 +95,37 @@ public class GameEngine {
     public void startGame() throws IOException, URISyntaxException {
         Paddle paddle = new Paddle(300, 500, 200, 50);
         setPaddle(paddle);
-        this.paddle.render();
+        GameEngine.paddle.render();
 
         Ball ball = new Ball(375, 450, 50, 50, 5, 1, 1);
         setBall(ball);
-        this.ball.render();
+        GameEngine.ball.render();
 
-
-        ArrayList<Brick> bricks = new ArrayList<Brick>();
         Level level = new Level(1);
-        setBricks(bricks);
-        level.loadLevel(bricks);
-        this.bricks.forEach(b -> b.render());
+        level.loadLevel(GameEngine.getBricks());
+        bricks.forEach(b -> b.render());
 
     }
 
     public void updateGame() {
-        if (this.paddle.isPaddleSliding()) {
-            this.paddle.update();
-            this.paddle.render();
+        if (paddle.isPaddleSliding()) {
+            paddle.update();
+            paddle.render();
         }
-        if (this.ball.isBallMoving()) {
-            this.ball.update();
-            this.ball.render();
+        if (ball.isBallMoving()) {
+            ball.update();
+            ball.render();
         }
 
         ArrayList<Brick> bricktoRemove = new ArrayList<Brick>();
-        this.bricks.forEach(b -> b.update());
-        this.bricks.forEach(b -> {
+        bricks.forEach(b -> b.update());
+        bricks.forEach(b -> {
             if (!b.isDestroyed()) b.render();
             else {
                 bricktoRemove.add(b);
             }
         });
-        this.bricks.removeAll(bricktoRemove);
+        bricks.removeAll(bricktoRemove);
     }
 
     public void handleInput(Canvas gameCanvas) {
@@ -150,6 +147,6 @@ public class GameEngine {
     }
 
     public boolean gameOver() {
-        return this.ball.getY() >= 550;
+        return ball.getY() >= 550;
     }
 }

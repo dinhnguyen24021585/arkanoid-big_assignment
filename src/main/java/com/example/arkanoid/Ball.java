@@ -91,7 +91,6 @@ public class Ball extends MovableObject {
             reverseY();
         }
         if (getX() == 0 || getX() + 50 == 800) {
-            System.out.println(getX());
             reverseX();
         }
     }
@@ -100,9 +99,11 @@ public class Ball extends MovableObject {
         if (getX() < other.getX() + other.getWidth() && getX() + getWidth() > other.getX()
                 && getY() < other.getY() + other.getHeight() && getY() + getHeight() > other.getY()) {
             bounceOff(other);
+
             if (other instanceof Brick brick) {
-                if (brick.getHitPoints() != Integer.MAX_VALUE) brick.takeHits();
+                if (!(other instanceof UnbreakableBrick)) brick.takeHits();
             }
+
         }
     }
 
