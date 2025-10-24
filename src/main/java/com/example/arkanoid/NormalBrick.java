@@ -8,9 +8,11 @@ public class NormalBrick extends  Brick {
     @Override
     public int takeHits() {
         if (!destroyed) {
+            Sound.play("Hit.wav");
             type--;
             if (type <= 0) {
                 destroyed = true;
+                Sound.play("Break.wav");
                 return hitPoints;
             } else {
                 loadImage();
