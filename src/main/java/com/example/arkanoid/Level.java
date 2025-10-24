@@ -76,7 +76,7 @@ public class Level {
 
         Integer numOfPowers = (int) Math.floor(Math.random() * 40);
         for (int i = 0; i < numOfPowers; i++) {
-            Integer typeOfPower = (int) Math.floor(Math.random() * 2) + 1;
+            Integer typeOfPower = (int) Math.floor(Math.random() * 3) + 1;
 
             Integer location = (int) Math.floor(Math.random() * 40);
             if (isBricksShown[location / 10][location % 10] != 0
@@ -92,6 +92,11 @@ public class Level {
                             .ifPresent(powerUps::add);
                 } else if (typeOfPower == 2) {
                     PowerUp powerUp = new FastBallPowerUp(x,y);
+                    Optional.ofNullable(powerUp)
+                            .filter(e -> e.getX() == x && e.getY() == y)
+                            .ifPresent(powerUps::add);
+                } else if(typeOfPower == 3) {
+                    PowerUp powerUp = new HeartPowerUp(x,y);
                     Optional.ofNullable(powerUp)
                             .filter(e -> e.getX() == x && e.getY() == y)
                             .ifPresent(powerUps::add);
