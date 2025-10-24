@@ -10,65 +10,46 @@ public abstract class PowerUp extends GameObject {
 
     public PowerUp(int x, int y, int width, int height, int type) {
         super(x, y, width, height);
-        this.active = true;
-        this.duration = 10000;
+        this.active = false;
+        this.duration = 3000;
         this.type = type;
-        this.effectApplied = false;
         this.effectActive = false;
     }
 
     public abstract void applyEffect();
+
     public abstract void removeEffect();
 
     public boolean isEffectExpired() {
         if (effectStartTime == 0) return false;
-        return (System.currentTimeMillis() - effectStartTime) >= duration;
+        return Math.abs(System.currentTimeMillis() - effectStartTime) >= duration;
     }
 
     public void startEffectTimer() {
         this.effectStartTime = System.currentTimeMillis();
-        this.effectApplied = true;
-        this.effectActive = true;
         this.active = false;
     }
 
     public boolean checkPaddleCollision(Paddle paddle) {
         if (!active || paddle == null) return false;
-        return paddle.checkCollision(paddle);
+
+        if (getX() < paddle.getX() + paddle.getWidth() && getX() + getWidth() > paddle.getX()
+                && getY() < paddle.getY() + paddle.getHeight() && getY() + getHeight() > paddle.getY()) {
+            return true;
+        }
+        return false;
     }
 
-    public void activate(GameEngine gameEngine) {
-        if (effectApplied) return;
-
+    public void activate() {
         applyEffect();
-        startEffectTimer();
+        effectActive = true;
     }
 
-    public void deactivate(GameEngine gameEngine) {
+    public void deactivate() {
         if (!effectActive) return;
-
         removeEffect();
         effectActive = false;
-        effectApplied = false;
         effectStartTime = 0;
-    }
-
-    public void updatePowerUp(Paddle paddle, GameEngine gameEngine) {
-        if (active) {
-            setY(getY() + 2);
-
-            if (checkPaddleCollision(paddle)) {
-                activate(gameEngine);
-            }
-
-            if (getY() > 600) {
-                active = false;
-            }
-        } else if (effectApplied && effectActive) {
-            if (isEffectExpired()) {
-                deactivate(gameEngine);
-            }
-        }
     }
 
     public boolean isActive() {
@@ -81,6 +62,10 @@ public abstract class PowerUp extends GameObject {
 
     public int getDuration() {
         return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 
     public int getType() {
@@ -99,6 +84,20 @@ public abstract class PowerUp extends GameObject {
     public void update() {
         if (active) {
             setY(getY() + 2);
+
+            if (checkPaddleCollision(GameEngine.getPaddle())) {
+                activate();
+            }
+
+            if (getY() > 600) {
+                active = false;
+            }
+        }
+        if (effectActive) {
+            if (isEffectExpired()) {
+                deactivate();
+
+            }
         }
     }
 

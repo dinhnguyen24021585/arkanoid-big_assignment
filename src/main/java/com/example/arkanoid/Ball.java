@@ -87,10 +87,10 @@ public class Ball extends MovableObject {
     }
 
     public void boundBorder() {
-        if (getY() == 0 || getY() + 50 == 600) {
+        if (getY() == 0 || getY() + GameConst.BallRadius == GameConst.HEIGHT) {
             reverseY();
         }
-        if (getX() == 0 || getX() + 50 == 800) {
+        if (getX() == 0 || getX() + GameConst.BallRadius == GameConst.WIDTH) {
             reverseX();
         }
     }
@@ -109,12 +109,12 @@ public class Ball extends MovableObject {
 
     @Override
     public void move() {
-        if (getX() + getDx() >= 0 && getX() + getDx() <= 800) {
+        if (getX() + getDx() >= 0 && getX() + getDx() <= GameConst.WIDTH) {
             setX(getX() + getDx());
         } else {
             setX(0);
         }
-        if (getY() + getDy() >= 0 && getY() + getDy() <= 600) {
+        if (getY() + getDy() >= 0 && getY() + getDy() <= GameConst.HEIGHT) {
             setY(getY() + getDy());
         } else {
             setY(0);

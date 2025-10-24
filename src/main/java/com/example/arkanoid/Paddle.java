@@ -8,8 +8,6 @@ public class Paddle extends MovableObject {
     private boolean isPaddleSliding = false;
     private Image image;
 
-    private final int SCREEN_WIDTH = 800;
-
     public Paddle(int x, int y, int width, int height) {
         super(0, 0);
         setX(x);
@@ -55,8 +53,6 @@ public class Paddle extends MovableObject {
     public void applyPowerUp() {
 
     }
-
-
 
     @Override
     public void move() {

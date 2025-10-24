@@ -2,6 +2,8 @@ module com.example.arkanoid {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.desktop;
+    requires jdk.jfr;
+    requires javafx.graphics;
 
 //    requires com.dlsc.formsfx;
 //    requires javafx.web;

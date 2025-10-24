@@ -2,7 +2,7 @@ package com.example.arkanoid;
 
 public class StrongBrick extends Brick {
     public StrongBrick(int x, int y, int hits, int type) {
-        super(x, y, 80, 30, hits, type);
+        super(x, y, GameConst.BrickWidth, GameConst.BrickHeight, hits, type);
     }
 
 

@@ -4,10 +4,10 @@ import javafx.scene.image.Image;
 
 public class ExpandPaddlePowerUp extends PowerUp {
     private Image image;
-    private Integer originalWidth = null;
+    private int currWidth;
 
     public ExpandPaddlePowerUp(int x, int y) {
-        super(x, y, 30, 30, 1);
+        super(x, y, GameConst.PowerWidth, GameConst.PowerHeight, 1);
         this.image = new Image(getClass().getResourceAsStream("/com/example/arkanoid/Image/powerup_expand.png"));
     }
 
@@ -15,18 +15,16 @@ public class ExpandPaddlePowerUp extends PowerUp {
     public void applyEffect() {
         if (GameEngine.getPaddle() == null || effectApplied) return;
 
-        Paddle paddle = GameEngine.getPaddle();
-        if (originalWidth == null) {
-            this.originalWidth = paddle.getWidth();
-        }
+        this.currWidth = GameEngine.getPaddle().getWidth();
 
-        int newWidth = (int) (originalWidth * 1.5);
-        int maxWidth = (int) (800 * 0.8);
+
+        int newWidth = (int) (currWidth * 1.5);
+        int maxWidth = (int) (GameConst.WIDTH * 0.8);
         if (newWidth > maxWidth) newWidth = maxWidth;
 
-        int centerX = paddle.getX() + (paddle.getWidth() / 2);
-        paddle.setX(centerX - (newWidth / 2));
-        paddle.setWidth(newWidth);
+        int centerX = GameEngine.getPaddle().getX() + (GameEngine.getPaddle().getWidth() / 2);
+        GameEngine.getPaddle().setX(centerX - (newWidth / 2));
+        GameEngine.getPaddle().setWidth(newWidth);
 
         startEffectTimer();
 
@@ -37,11 +35,11 @@ public class ExpandPaddlePowerUp extends PowerUp {
         if (GameEngine.getPaddle() == null || !isEffectActive()) return;
 
         Paddle paddle = GameEngine.getPaddle();
-        if (originalWidth != null) {
-            int centerX = paddle.getX() + (paddle.getWidth() / 2);
-            paddle.setX(centerX - (originalWidth / 2));
-            paddle.setWidth(originalWidth);
-        }
+
+        int centerX = GameEngine.getPaddle().getX() + (GameEngine.getPaddle().getWidth() / 2);
+        GameEngine.getPaddle().setX(centerX - (currWidth / 2));
+        GameEngine.getPaddle().setWidth(GameConst.PaddleWidth);
+
     }
 
     public Image getImage() {

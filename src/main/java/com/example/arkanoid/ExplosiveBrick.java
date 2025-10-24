@@ -5,7 +5,7 @@ import javafx.scene.image.Image;
 
 public class ExplosiveBrick extends Brick {
     public ExplosiveBrick(int x, int y) {
-        super(x, y, 80, 30, 1, -1);
+        super(x, y, GameConst.BrickWidth, GameConst.BrickHeight, 1, -1);
         loadImage();
     }
 
@@ -18,7 +18,6 @@ public class ExplosiveBrick extends Brick {
     public int takeHits() {
         if (!destroyed) {
             destroyed = true;
-            System.out.println(1);
             explode(GameEngine.getBricks());
             return hitPoints;
         }

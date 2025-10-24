@@ -17,7 +17,7 @@ public abstract class Brick  extends GameObject {
     }
 
     public Brick() {
-        this(0, 0, 60, 20, 1, 1);
+        this(0, 0, GameConst.BrickWidth, GameConst.BrickHeight, 1, 1);
     }
 
     protected void loadImage() {
