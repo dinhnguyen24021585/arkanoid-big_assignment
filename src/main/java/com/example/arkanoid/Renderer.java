@@ -1,13 +1,16 @@
 package com.example.arkanoid;
 
 import java.awt.*;
+
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
 public class Renderer {
     private static Renderer instance;
     private GraphicsContext gc;
-    private Renderer() {}
+
+    private Renderer() {
+    }
 
     public static Renderer getInstance() {
         if (instance == null) instance = new Renderer();
@@ -47,7 +50,7 @@ public class Renderer {
                         brick.getHeight()
                 );
             }
-        } else if ( obj instanceof PowerUp powerUp) {
+        } else if (obj instanceof PowerUp powerUp) {
             if (powerUp.isActive()) {
                 if (powerUp instanceof ExpandPaddlePowerUp expandPowerUp) {
                     gc.drawImage(
@@ -57,10 +60,17 @@ public class Renderer {
                             powerUp.getWidth(),
                             powerUp.getHeight()
                     );
-                }
-                else if ( powerUp instanceof FastBallPowerUp fastBallPowerUp) {
+                } else if (powerUp instanceof FastBallPowerUp fastBallPowerUp) {
                     gc.drawImage(
                             fastBallPowerUp.getImage(),
+                            powerUp.getX(),
+                            powerUp.getY(),
+                            powerUp.getWidth(),
+                            powerUp.getHeight()
+                    );
+                } else if (powerUp instanceof HeartPowerUp heartPowerUp) {
+                    gc.drawImage(
+                            heartPowerUp.getImage(),
                             powerUp.getX(),
                             powerUp.getY(),
                             powerUp.getWidth(),
