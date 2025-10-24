@@ -18,8 +18,9 @@ public class GameEngine {
     private static ArrayList<PowerUp> powerUps = new ArrayList<PowerUp>();
     private static Level level =  new Level(1);
     private int score = 0;
-    private int lives;
+    private static int lives;
     private int gameState;
+
 
     public GameEngine() {
     }
@@ -88,12 +89,12 @@ public class GameEngine {
         this.score = score;
     }
 
-    public int getLives() {
+    public static int getLives() {
         return lives;
     }
 
-    public void setLives(int lives) {
-        this.lives = lives;
+    public static void setLives(int lives_) {
+        lives = lives_;
     }
 
     public int getGameState() {
@@ -108,6 +109,9 @@ public class GameEngine {
         GameEngine.paddle.render();
 
         GameEngine.ball.render();
+        HeartPowerUp.resetHeartCounter();
+
+        GameEngine.paddle.render();
 
         GameEngine.getBricks().clear();
         GameEngine.getPowerUps().clear();
@@ -135,7 +139,16 @@ public class GameEngine {
         powerUps.forEach(powerUp -> {
             powerUp.update();
             powerUp.render();
-            if (powerUp.isEffectExpired() || gameOver()) {
+
+            if (powerUp instanceof HeartPowerUp && powerUp.checkPaddleCollision(GameEngine.paddle)) {
+                HeartPowerUp heart = (HeartPowerUp) powerUp;
+                GameEngine.setLives(GameEngine.getLives() + 1);
+
+                powerUpsToRemove.add(powerUp);
+            }
+
+            if (powerUp.isEffectExpired() || gameOver() ||
+                    (powerUp instanceof HeartPowerUp && powerUp.isEffectApplied())) {
                 powerUpsToRemove.add(powerUp);
             }
         });
@@ -161,6 +174,7 @@ public class GameEngine {
         });
 
         bricks.removeAll(bricktoRemove);
+
 
         levelUp();
     }
