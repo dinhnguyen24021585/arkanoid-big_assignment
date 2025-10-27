@@ -1,14 +1,13 @@
 package com.example.arkanoid;
 
 import java.io.IOException;
-import java.net.Inet4Address;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Level {
     private int lvl;
@@ -74,32 +73,33 @@ public class Level {
             }
         }
 
-        Integer numOfPowers = (int) Math.floor(Math.random() * 40);
+        int numOfPowers = (int) Math.floor(Math.random() * 40);
         for (int i = 0; i < numOfPowers; i++) {
-            Integer typeOfPower = (int) Math.floor(Math.random() * 3) + 1;
+            int typeOfPower = (int) Math.floor(Math.random() * 3) + 1;
 
-            Integer location = (int) Math.floor(Math.random() * 40);
+            int location = (int) Math.floor(Math.random() * 40);
             if (isBricksShown[location / 10][location % 10] != 0
                     && isBricksShown[location / 10][location % 10] != Integer.MAX_VALUE) {
                 int x = (GameConst.BrickWidth - GameConst.PowerWidth) / 2
                         + GameConst.BrickWidth * (location % 10);
                 int y = 50 + GameConst.BrickHeight * (location / 10);
-                if (typeOfPower == 1) {
+
+                AtomicBoolean overlap = new AtomicBoolean(false);
+                powerUps.forEach(powerUp -> {
+                    if (powerUp.getX() == x && powerUp.getY() == y) {
+                        overlap.set(true);
+                    }
+                });
+
+                if (typeOfPower == 1 && !overlap.get()) {
                     PowerUp powerUp = new ExpandPaddlePowerUp(x,y);
-                    //kiem tra power bi chong len nhau
-                    Optional.ofNullable(powerUp)
-                            .filter(e -> e.getX() == x && e.getY() == y)
-                            .ifPresent(powerUps::add);
-                } else if (typeOfPower == 2) {
+                    powerUps.add(powerUp);
+                } else if (typeOfPower == 2 && !overlap.get()) {
                     PowerUp powerUp = new FastBallPowerUp(x,y);
-                    Optional.ofNullable(powerUp)
-                            .filter(e -> e.getX() == x && e.getY() == y)
-                            .ifPresent(powerUps::add);
-                } else if(typeOfPower == 3) {
+                    powerUps.add(powerUp);
+                } else if(typeOfPower == 3 && !overlap.get()) {
                     PowerUp powerUp = new HeartPowerUp(x,y);
-                    Optional.ofNullable(powerUp)
-                            .filter(e -> e.getX() == x && e.getY() == y)
-                            .ifPresent(powerUps::add);
+                    powerUps.add(powerUp);
                 }
             }
         }

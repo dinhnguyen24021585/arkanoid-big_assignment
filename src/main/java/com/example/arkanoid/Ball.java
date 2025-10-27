@@ -87,10 +87,10 @@ public class Ball extends MovableObject {
     }
 
     public void boundBorder() {
-        if (getY() == 0 || getY() + GameConst.BallRadius == GameConst.HEIGHT) {
+        if (getY() == 0 || getY() + GameConst.BallRadius + getDy() >= GameConst.HEIGHT) {
             reverseY();
         }
-        if (getX() == 0 || getX() + GameConst.BallRadius == GameConst.WIDTH) {
+        if (getX() == 0 || getX() + GameConst.BallRadius + getDx() >= GameConst.WIDTH) {
             reverseX();
         }
     }

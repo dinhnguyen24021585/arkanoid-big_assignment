@@ -4,7 +4,6 @@ import javafx.scene.image.Image;
 
 public class HeartPowerUp extends PowerUp {
     private Image image;
-    private static int totalHeartsCollected = 0;
     private static final int MAX_HEARTS = 10;
 
     public HeartPowerUp(int x, int y) {
@@ -14,12 +13,13 @@ public class HeartPowerUp extends PowerUp {
 
     @Override
     public void applyEffect() {
-        if (effectApplied) return;
+        if (effectActive) return;
+        System.out.println(2);
+        if (GameEngine.getLives() < MAX_HEARTS) {
 
-        if (totalHeartsCollected < MAX_HEARTS) {
-            totalHeartsCollected++;
+            GameEngine.setLives(GameEngine.getLives() + 1);
 
-            effectApplied = true;
+            //effectApplied = true;
             effectActive = true;
         }
     }
@@ -39,11 +39,11 @@ public class HeartPowerUp extends PowerUp {
     }
 
     public static void resetHeartCounter() {
-        totalHeartsCollected = 0;
+        GameEngine.setLives(0);
     }
 
     public static int getTotalHeartsCollected() {
-        return totalHeartsCollected;
+        return GameEngine.getLives();
     }
 
     public static int getMaxHearts() {

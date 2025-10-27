@@ -13,7 +13,7 @@ public class ExpandPaddlePowerUp extends PowerUp {
 
     @Override
     public void applyEffect() {
-        if (GameEngine.getPaddle() == null || effectApplied) return;
+        if (GameEngine.getPaddle() == null || effectActive) return;
 
         this.currWidth = GameEngine.getPaddle().getWidth();
 

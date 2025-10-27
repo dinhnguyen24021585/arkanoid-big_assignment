@@ -140,15 +140,7 @@ public class GameEngine {
             powerUp.update();
             powerUp.render();
 
-            if (powerUp instanceof HeartPowerUp && powerUp.checkPaddleCollision(GameEngine.paddle)) {
-                HeartPowerUp heart = (HeartPowerUp) powerUp;
-                GameEngine.setLives(GameEngine.getLives() + 1);
-
-                powerUpsToRemove.add(powerUp);
-            }
-
-            if (powerUp.isEffectExpired() || gameOver() ||
-                    (powerUp instanceof HeartPowerUp && powerUp.isEffectApplied())) {
+            if (powerUp.isEffectExpired() || (powerUp instanceof HeartPowerUp && powerUp.checkPaddleCollision(paddle))) {
                 powerUpsToRemove.add(powerUp);
             }
         });
@@ -174,7 +166,6 @@ public class GameEngine {
         });
 
         bricks.removeAll(bricktoRemove);
-
 
         levelUp();
     }
@@ -212,8 +203,17 @@ public class GameEngine {
             powerUps.forEach(p -> p.render());
 
             setLives(GameConst.DefaultLives);
-            setGameState(0);
+            setGameState(1);
             setScore(0);
+
+            paddle.setX(GameConst.DefaultPaddle_X);
+            paddle.setY(GameConst.DefaultPaddle_Y);
+            paddle.setWidth(GameConst.PaddleWidth);
+
+            ball.setX(GameConst.DefaultBall_X);
+            ball.setY(GameConst.DefaultBall_Y);
+            ball.setSpeed(GameConst.DefaultSpeed);
+
         }
     }
 
