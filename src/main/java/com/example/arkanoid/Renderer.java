@@ -8,6 +8,8 @@ import javafx.scene.image.Image;
 public class Renderer {
     private static Renderer instance;
     private GraphicsContext gc;
+    private Image cachedBg = null;
+    private String cachedBgPath = null;
 
     private Renderer() {
     }
@@ -79,6 +81,18 @@ public class Renderer {
                 }
             }
         }
+    }
+
+    public void renderBackground(Level level) {
+        if (gc == null || level == null) return;
+
+        String bgPath = level.getBackground();
+        if (cachedBg == null || !bgPath.equals(cachedBgPath)) {
+            cachedBg = new Image(getClass().getResource(bgPath).toExternalForm());
+            cachedBgPath = bgPath;
+        }
+
+        gc.drawImage(cachedBg, 0, 0, GameConst.WIDTH, GameConst.HEIGHT);
     }
 
     public void renderAll(GameObject[] objects) {

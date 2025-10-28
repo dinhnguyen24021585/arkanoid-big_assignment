@@ -37,8 +37,10 @@ public class ArkanoidController {
         AnimationTimer gameLoop = new AnimationTimer() {
             @Override
             public void handle(long l) {
-                if (gameEngine.getBall().isBallMoving())
-                    gc.clearRect(0, 0, gameCanvas.getWidth(), gameCanvas.getHeight());
+                gc.clearRect(0, 0, gameCanvas.getWidth(), gameCanvas.getHeight());
+                Renderer.getInstance().renderBackground(GameEngine.getLevel());
+                Renderer.getInstance().render(GameEngine.getPaddle());
+                Renderer.getInstance().render(GameEngine.getBall());
 
                 if (!gameEngine.gameOver()) {
                     try {

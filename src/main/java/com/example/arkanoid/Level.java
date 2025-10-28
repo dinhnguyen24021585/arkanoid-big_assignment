@@ -10,6 +10,7 @@ import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Level {
+    private String background;
     private int lvl;
     private int[][] isBricksShown = new int[4][10];
     private int numOfBricksToLvlUp;
@@ -18,6 +19,14 @@ public class Level {
 
     public Level(int lvl) {
         this.lvl = lvl;
+    }
+
+    public String getBackground() {
+        return background;
+    }
+
+    public void setBackground(String background) {
+        this.background = background;
     }
 
     public int getLvl() {
@@ -40,6 +49,7 @@ public class Level {
             throws IOException, URISyntaxException {
         List<String> lines = Files.readAllLines(Paths.get(getClass().
                 getResource("/com/example/arkanoid/Levels/level" + this.lvl + ".txt").toURI()));
+        this.background = "/com/example/arkanoid/Image/background" + this.lvl + ".png";
         for (int i = 0; i < lines.size(); i++) {
             Scanner scanner = new Scanner(lines.get(i));
             int k = 0;

@@ -214,6 +214,9 @@ public class GameEngine {
             ball.setY(GameConst.DefaultBall_Y);
             ball.setSpeed(GameConst.DefaultSpeed);
 
+            setGameState(0);
+            ball.setBallMoving(true);
+            paddle.setPaddleSliding(true);
         }
     }
 
