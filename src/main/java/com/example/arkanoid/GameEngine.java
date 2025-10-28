@@ -106,6 +106,7 @@ public class GameEngine {
     }
 
     public void startGame() throws IOException, URISyntaxException {
+       Renderer.getInstance().renderBackground();
         GameEngine.paddle.render();
 
         GameEngine.ball.render();
@@ -118,14 +119,16 @@ public class GameEngine {
 
         GameEngine.level.setLvl(level.getLvl());
         level.loadLevel(GameEngine.getBricks(), GameEngine.getPowerUps());
+
         bricks.forEach(b -> b.render());
         powerUps.forEach(p -> p.render());
 
         setLives(GameConst.DefaultLives);
-        setGameState(0);
+        setGameState(1);
     }
 
     public void updateGame() throws IOException, URISyntaxException, InterruptedException {
+        Renderer.getInstance().renderBackground();
         if (paddle.isPaddleSliding()) {
             if (gameState == 0) paddle.update();
             paddle.render();

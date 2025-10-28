@@ -1,6 +1,7 @@
 package com.example.arkanoid;
 
 import java.awt.*;
+import java.util.Objects;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -8,6 +9,7 @@ import javafx.scene.image.Image;
 public class Renderer {
     private static Renderer instance;
     private GraphicsContext gc;
+    private Image Bg = null;
 
     private Renderer() {
     }
@@ -79,6 +81,14 @@ public class Renderer {
                 }
             }
         }
+    }
+
+    public void renderBackground() {
+        if (gc == null || GameEngine.getLevel() == null) return;
+        Bg = new Image(getClass().getResourceAsStream(
+                "/com/example/arkanoid/Image/background" + GameEngine.getLevel().getLvl() + ".png"));
+
+        gc.drawImage(Bg, 0, 0, GameConst.WIDTH, GameConst.HEIGHT);
     }
 
     public void renderAll(GameObject[] objects) {

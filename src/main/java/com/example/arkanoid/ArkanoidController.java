@@ -37,26 +37,20 @@ public class ArkanoidController {
         AnimationTimer gameLoop = new AnimationTimer() {
             @Override
             public void handle(long l) {
+                gameEngine.handleInput(gameCanvas);
                 if (gameEngine.getBall().isBallMoving())
                     gc.clearRect(0, 0, gameCanvas.getWidth(), gameCanvas.getHeight());
 
-                if (!gameEngine.gameOver()) {
+                if (!gameEngine.gameOver() && gameEngine.getGameState() == 0) {
                     try {
                         gameEngine.updateGame();
                     } catch (IOException | URISyntaxException | InterruptedException e) {
                         throw new RuntimeException(e);
                     }
-                    gameEngine.handleInput(gameCanvas);
+
                     gameEngine.checkCollision();
 
-                    gc.setFill(Color.BLACK);
-                    gc.setFont(Font.font("Arial", GameConst.FontSize));
-                    gc.fillText(String.format("Level %d", GameEngine.getLevel().getLvl()), 0,
-                            GameConst.HEIGHT - GameConst.FontSize);
-                    gc.fillText(String.format("Score: %d", gameEngine.getScore()), 350,
-                            GameConst.HEIGHT - GameConst.FontSize);
-                    gc.fillText(String.format("Live(s): %d", gameEngine.getLives()), 700,
-                            GameConst.HEIGHT - GameConst.FontSize);
+
                 } else {
                     try {
                         gameEngine.startGame();
@@ -64,7 +58,14 @@ public class ArkanoidController {
                         throw new RuntimeException(e);
                     }
                 }
-
+                gc.setFill(Color.BLACK);
+                gc.setFont(Font.font("Arial", GameConst.FontSize));
+                gc.fillText(String.format("Level %d", GameEngine.getLevel().getLvl()), 0,
+                        GameConst.HEIGHT - GameConst.FontSize);
+                gc.fillText(String.format("Score: %d", gameEngine.getScore()), 350,
+                        GameConst.HEIGHT - GameConst.FontSize);
+                gc.fillText(String.format("Live(s): %d", gameEngine.getLives()), 700,
+                        GameConst.HEIGHT - GameConst.FontSize);
                 //if (GameEngine.getLevel().getNumOfBricksToLvlUp() == 0)
 
             }
