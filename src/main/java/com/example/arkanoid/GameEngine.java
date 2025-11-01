@@ -17,9 +17,9 @@ public class GameEngine {
     private static ArrayList<Brick> bricks = new ArrayList<Brick>();
     private static ArrayList<PowerUp> powerUps = new ArrayList<PowerUp>();
     private static Level level =  new Level(1);
-    private int score = 0;
+    private static int score = 0;
     private static int lives;
-    private int gameState;
+    private static int gameState;
 
 
     public GameEngine() {
@@ -81,12 +81,12 @@ public class GameEngine {
         GameEngine.level = level;
     }
 
-    public int getScore() {
+    public static int getScore() {
         return score;
     }
 
-    public void setScore(int score) {
-        this.score = score;
+    public static void setScore(int score) {
+        GameEngine.score = score;
     }
 
     public static int getLives() {
@@ -97,15 +97,15 @@ public class GameEngine {
         lives = lives_;
     }
 
-    public int getGameState() {
+    public static int getGameState() {
         return gameState;
     }
 
-    public void setGameState(int gameState) {
-        this.gameState = gameState;
+    public static void setGameState(int gameState) {
+        GameEngine.gameState = gameState;
     }
 
-    public void startGame() throws IOException, URISyntaxException {
+    public static void startGame() throws IOException, URISyntaxException {
        Renderer.getInstance().renderBackground();
         GameEngine.paddle.render();
 
@@ -127,23 +127,26 @@ public class GameEngine {
         setGameState(1);
     }
 
-    public void updateGame() throws IOException, URISyntaxException, InterruptedException {
+    public void updateGame() throws IOException, URISyntaxException, InterruptedException  {
         Renderer.getInstance().renderBackground();
         if (paddle.isPaddleSliding()) {
-            if (gameState == 0) paddle.update();
-            paddle.render();
+            paddle.update();
         }
+        paddle.render();
+
         if (ball.isBallMoving()) {
-            if (gameState == 0) ball.update();
-            ball.render();
+            ball.update();
+
         }
+        ball.render();
 
         ArrayList<PowerUp> powerUpsToRemove = new ArrayList<PowerUp>();
         powerUps.forEach(powerUp -> {
             powerUp.update();
             powerUp.render();
 
-            if (powerUp.isEffectExpired() || (powerUp instanceof HeartPowerUp && powerUp.checkPaddleCollision(paddle))) {
+            if (powerUp.isEffectExpired() || (powerUp instanceof HeartPowerUp
+                    && powerUp.checkPaddleCollision(paddle))) {
                 powerUpsToRemove.add(powerUp);
             }
         });
@@ -171,6 +174,7 @@ public class GameEngine {
         bricks.removeAll(bricktoRemove);
 
         levelUp();
+
     }
 
     public void handleInput(Canvas gameCanvas) {
@@ -217,6 +221,14 @@ public class GameEngine {
             ball.setY(GameConst.DefaultBall_Y);
             ball.setSpeed(GameConst.DefaultSpeed);
 
+            paddle.setPaddleSliding(false);
+            ball.setBallMoving(false);
+
+            Renderer.getInstance().renderBackground();
+            bricks.forEach(b -> b.render());
+            paddle.render();
+            ball.render();
+
         }
     }
 
@@ -232,6 +244,15 @@ public class GameEngine {
             ball.setY(GameConst.DefaultBall_Y);
             ball.setSpeed(GameConst.DefaultSpeed);
 
+            paddle.setPaddleSliding(false);
+            ball.setBallMoving(false);
+
+            Renderer.getInstance().renderBackground();
+            bricks.forEach(b -> b.render());
+            paddle.render();
+            ball.render();
+
+
             gameState = 1;
         }
 
@@ -239,6 +260,8 @@ public class GameEngine {
             setScore(0);
             paddle.setWidth(GameConst.PaddleWidth);
             ball.setSpeed(GameConst.DefaultSpeed);
+
+            level.setNumOfBricksToLvlUp(0);
 
             return true;
         }

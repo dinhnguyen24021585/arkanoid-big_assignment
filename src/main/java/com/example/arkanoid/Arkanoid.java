@@ -19,7 +19,7 @@ import java.util.*;
 public class Arkanoid extends Application {
         @Override
         public void start(Stage stage) throws Exception {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/arkanoid/arkanoid-view.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/arkanoid/menu.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 800, 600);
             stage.setTitle("JavaFX + SceneBuilder Demo");
 

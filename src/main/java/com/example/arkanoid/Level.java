@@ -13,6 +13,7 @@ public class Level {
     private int lvl;
     private int[][] isBricksShown = new int[4][10];
     private int numOfBricksToLvlUp;
+    private static boolean[] chooseLevel = new boolean[10];
 
     public Level() {}
 
@@ -34,6 +35,14 @@ public class Level {
 
     public void setNumOfBricksToLvlUp(int numOfBricksToLvlUp) {
         this.numOfBricksToLvlUp = numOfBricksToLvlUp;
+    }
+
+    public static boolean[] getChooseLevel() {
+        return chooseLevel;
+    }
+
+    public static void setChooseLevel(boolean[] chooseLevel) {
+        Level.chooseLevel = chooseLevel;
     }
 
     public void loadLevel(ArrayList<Brick> bricks, ArrayList<PowerUp> powerUps)

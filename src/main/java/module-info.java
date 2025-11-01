@@ -6,6 +6,7 @@ module com.example.arkanoid {
     requires javafx.graphics;
     requires javafx.media;
 
+
 //    requires com.dlsc.formsfx;
 //    requires javafx.web;
 
