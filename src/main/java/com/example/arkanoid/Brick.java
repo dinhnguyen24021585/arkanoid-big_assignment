@@ -51,6 +51,10 @@ public abstract class Brick  extends GameObject {
         return destroyed;
     }
 
+    public void setDestroyed(boolean destroyed) {
+        this.destroyed = destroyed;
+    }
+
     @Override
     public void update() {
 

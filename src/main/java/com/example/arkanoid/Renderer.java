@@ -1,6 +1,5 @@
 package com.example.arkanoid;
 
-import java.awt.*;
 import java.util.Objects;
 
 import javafx.scene.canvas.GraphicsContext;

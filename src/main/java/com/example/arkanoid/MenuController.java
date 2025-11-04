@@ -6,6 +6,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 
 public class MenuController {
@@ -33,7 +35,12 @@ public class MenuController {
 
     @FXML
     public void loadGame() throws Exception {
-
+        Stage stage = (Stage) btnLoad.getScene().getWindow();
+        stage.setScene(gameScene);
+        GameEngine.loadStateFromFile();
+        GameEngine.getPaddle().setPaddleSliding(true);
+        GameEngine.getBall().setBallMoving(true);
+        GameEngine.setGameState(1);
     }
 
     @FXML

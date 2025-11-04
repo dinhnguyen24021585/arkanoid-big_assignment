@@ -5,7 +5,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
@@ -20,6 +20,7 @@ public class GameEngine {
     private static int score = 0;
     private static int lives;
     private static int gameState;
+    private static AnimationTimer gameLoop;
 
 
     public GameEngine() {
@@ -266,5 +267,158 @@ public class GameEngine {
             return true;
         }
         return false;
+    }
+
+    public static void saveStateToFile() {
+        try (PrintWriter writer = new PrintWriter(new FileWriter("save_state.txt"))) {
+            writer.println("level=" + level.getLvl());
+            writer.println("score=" + score);
+            writer.println("lives=" + lives);
+
+            writer.println("paddle=" + paddle.getX() + "," + paddle.getY() + "," + paddle.isPaddleSliding());
+            writer.println("ball=" + ball.getX() + "," + ball.getY() + "," + ball.isBallMoving());
+
+            for (Brick b : bricks) {
+                writer.println("brick=" + b.getClass().getSimpleName() + "," +
+                        b.getX() + "," + b.getY() + "," + b.isDestroyed() + "," +
+                        b.getHitPoints() + "," + b.getType());
+            }
+
+            for (PowerUp p : powerUps) {
+                writer.println("powerup=" + p.getClass().getSimpleName() + ","
+                        + p.getX() + "," + p.getY() + "," + p.isActive());
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void loadStateFromFile() {
+        try (BufferedReader reader = new BufferedReader(new FileReader("save_state.txt"))) {
+            bricks.clear();
+            powerUps.clear();
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split("=", 2);
+                if (parts.length < 2) continue;
+                String key = parts[0].trim();
+                String value = parts[1].trim();
+
+                switch (key) {
+                    case "level" -> level.setLvl(Integer.parseInt(value));
+                    case "score" -> score = Integer.parseInt(value);
+                    case "lives" -> lives = Integer.parseInt(value);
+
+                    case "paddle" -> {
+                        String[] vals = value.split(",");
+                        paddle.setX((int) Double.parseDouble(vals[0]));
+                        paddle.setY((int) Double.parseDouble(vals[1]));
+                        paddle.setPaddleSliding(Boolean.parseBoolean(vals[2]));
+                    }
+
+                    case "ball" -> {
+                        String[] vals = value.split(",");
+                        ball.setX((int) Double.parseDouble(vals[0]));
+                        ball.setY((int) Double.parseDouble(vals[1]));
+                        ball.setBallMoving(Boolean.parseBoolean(vals[2]));
+                    }
+
+                    case "brick" -> {
+                        String[] vals = value.split(",");
+                        String type = vals[0];
+                        int x = Integer.parseInt(vals[1]);
+                        int y = Integer.parseInt(vals[2]);
+                        boolean destroyed = Boolean.parseBoolean(vals[3]);
+                        int hits = Integer.parseInt(vals[4]);
+                        int brickType = Integer.parseInt(vals[5]);
+
+                        Brick b = switch (type) {
+                            case "NormalBrick" -> new NormalBrick(x, y);
+                            case "StrongBrick" -> new StrongBrick(x, y, hits, brickType);
+                            case "UnbreakableBrick" -> new UnbreakableBrick(x, y);
+                            case "ExplosiveBrick" -> new ExplosiveBrick(x, y);
+                            default -> null;
+                        };
+
+                        if (b != null) {
+                            b.setDestroyed(destroyed);
+                            bricks.add(b);
+                        }
+                    }
+
+                    case "powerup" -> {
+                        String[] vals = value.split(",");
+                        String type = vals[0];
+                        int x = Integer.parseInt(vals[1]);
+                        int y = Integer.parseInt(vals[2]);
+                        boolean active = Boolean.parseBoolean(vals[3]);
+                        PowerUp p = null;
+                        switch (type) {
+                            case "HeartPowerUp" -> p = new HeartPowerUp(x, y);
+                            case "ExpandPaddlePowerUp" -> p = new ExpandPaddlePowerUp(x, y);
+                            case "FastBallPowerUp" -> p = new FastBallPowerUp(x, y);
+                        }
+                        if (p != null) {
+                            p.setActive(active);
+                            powerUps.add(p);
+                        }
+                    }
+                }
+            }
+
+            Renderer.getInstance().renderBackground();
+            bricks.forEach(b -> { if (!b.isDestroyed()) b.render(); });
+            powerUps.forEach(p -> p.render());
+            paddle.render();
+            ball.render();
+
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+
+    public static void startLoop() {
+        if (gameLoop == null) {
+            gameLoop = new AnimationTimer() {
+                @Override
+                public void handle(long now) {
+                    if (getGameState() == 1) {
+                        update();
+                    }
+                    render();
+                }
+            };
+        }
+        gameLoop.start();
+    }
+
+    public static void stopLoop() {
+        if (gameLoop != null) {
+            gameLoop.stop();
+            gameLoop = null;
+        }
+        gameState = 0;
+    }
+
+    private static void update() {
+        try {
+            GameEngine engine = new GameEngine();
+            engine.updateGame();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void render() {
+        Renderer.getInstance().renderBackground();
+        bricks.forEach(b -> {
+            if (!b.isDestroyed()) b.render();
+        });
+        powerUps.forEach(PowerUp::render);
+        paddle.render();
+        ball.render();
     }
 }
