@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URISyntaxException;
 
 import static com.example.arkanoid.GameEngine.setLives;
@@ -63,7 +64,15 @@ public class PauseController {
 
     }
 
-    public void quitToMenu() {
+    @FXML
+    public void quitToMenu() throws IOException {
+        GameEngine.setGameState(0);
+        GameEngine.saveStateToFile();
 
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/arkanoid/menu.fxml"));
+        Scene menuScene = new Scene(loader.load());
+
+        Stage stage = (Stage) btnQuitToMenu.getScene().getWindow();
+        stage.setScene(menuScene);
     }
 }
