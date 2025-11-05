@@ -14,6 +14,10 @@
     -fx-background-image: url("newgame.png");
 }
 
+#btnLvls {
+    -fx-background-image: url("level.png");
+}
+
 #btnLoad {
     -fx-background-image: url("resume.png");
 }
