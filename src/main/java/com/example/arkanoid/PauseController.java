@@ -12,6 +12,7 @@ import java.io.PrintWriter;
 import java.net.URISyntaxException;
 
 import static com.example.arkanoid.GameEngine.setLives;
+import static com.example.arkanoid.GameEngine.startGame;
 
 public class PauseController {
     @FXML
@@ -34,27 +35,7 @@ public class PauseController {
 
     @FXML
     public void replay() throws IOException, URISyntaxException {
-        GameEngine.getBricks().clear();
-        GameEngine.getPowerUps().clear();
-
-        GameEngine.getLevel().setNumOfBricksToLvlUp(0);
-        GameEngine.getLevel().loadLevel(GameEngine.getBricks(), GameEngine.getPowerUps());
-        GameEngine.getBricks().forEach(b -> b.render());
-        GameEngine.getPowerUps().forEach(p -> p.render());
-
-        setLives(GameConst.DefaultLives);
-        GameEngine.setGameState(1);
-        GameEngine.setScore(0);
-
-        GameEngine.getPaddle().setX(GameConst.DefaultPaddle_X);
-        GameEngine.getPaddle().setY(GameConst.DefaultPaddle_Y);
-        GameEngine.getPaddle().setWidth(GameConst.PaddleWidth);
-        GameEngine.getPaddle().setPaddleSliding(false);
-
-        GameEngine.getBall().setX(GameConst.DefaultBall_X);
-        GameEngine.getBall().setY(GameConst.DefaultBall_Y);
-        GameEngine.getBall().setSpeed(GameConst.DefaultSpeed);
-        GameEngine.getBall().setBallMoving(false);
+        startGame();
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/arkanoid/arkanoid-view.fxml"));
 
@@ -66,8 +47,10 @@ public class PauseController {
 
     @FXML
     public void quitToMenu() throws IOException {
-        GameEngine.setGameState(0);
+        GameEngine.setGameState(1);
         GameEngine.saveStateToFile();
+
+        ArkanoidController.gameLoop.stop();
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/arkanoid/menu.fxml"));
         Scene menuScene = new Scene(loader.load());

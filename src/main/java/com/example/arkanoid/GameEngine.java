@@ -107,28 +107,40 @@ public class GameEngine {
     }
 
     public static void startGame() throws IOException, URISyntaxException {
-       Renderer.getInstance().renderBackground();
-        GameEngine.paddle.render();
+        Renderer.getInstance().renderBackground();
+        paddle.setX(GameConst.DefaultPaddle_X);
+        paddle.setY(GameConst.DefaultPaddle_Y);
+        paddle.setWidth(GameConst.PaddleWidth);
 
+        ball.setX(GameConst.DefaultBall_X);
+        ball.setY(GameConst.DefaultBall_Y);
+        ball.setSpeed(GameConst.DefaultSpeed);
+
+        paddle.setPaddleSliding(false);
+        ball.setBallMoving(false);
+
+        GameEngine.paddle.render();
         GameEngine.ball.render();
-        HeartPowerUp.resetHeartCounter();
 
-        GameEngine.paddle.render();
+
+        HeartPowerUp.resetHeartCounter();
 
         GameEngine.getBricks().clear();
         GameEngine.getPowerUps().clear();
 
         GameEngine.level.setLvl(level.getLvl());
+        GameEngine.getLevel().setNumOfBricksToLvlUp(0);
         level.loadLevel(GameEngine.getBricks(), GameEngine.getPowerUps());
 
         bricks.forEach(b -> b.render());
         powerUps.forEach(p -> p.render());
 
         setLives(GameConst.DefaultLives);
-        setGameState(1);
+        setScore(0);
+       // setGameState(1);
     }
 
-    public void updateGame() throws IOException, URISyntaxException, InterruptedException  {
+    public static void updateGame() throws IOException, URISyntaxException, InterruptedException  {
         Renderer.getInstance().renderBackground();
         if (paddle.isPaddleSliding()) {
             paddle.update();
@@ -178,7 +190,7 @@ public class GameEngine {
 
     }
 
-    public void handleInput(Canvas gameCanvas) {
+    public static void handleInput(Canvas gameCanvas) {
         gameCanvas.setOnMouseClicked(MouseEvent -> {
             ball.setBallMoving(true);
             paddle.setPaddleSliding(true);
@@ -192,48 +204,21 @@ public class GameEngine {
         });
     }
 
-    public void checkCollision() {
+    public static void checkCollision() {
         ball.checkCollision(paddle);
         bricks.forEach(b -> ball.checkCollision(b));
         ball.boundBorder();
         powerUps.forEach(powerUp -> powerUp.checkPaddleCollision(GameEngine.paddle));
     }
 
-    public void levelUp() throws IOException, URISyntaxException {
+    public static void levelUp() throws IOException, URISyntaxException {
         if (getLevel().getNumOfBricksToLvlUp() == 0) {
             level.setLvl(getLevel().getLvl() + 1);
-
-            GameEngine.getBricks().clear();
-            GameEngine.getPowerUps().clear();
-
-            level.loadLevel(GameEngine.getBricks(), GameEngine.getPowerUps());
-            bricks.forEach(b -> b.render());
-            powerUps.forEach(p -> p.render());
-
-            setLives(GameConst.DefaultLives);
-            setGameState(1);
-            setScore(0);
-
-            paddle.setX(GameConst.DefaultPaddle_X);
-            paddle.setY(GameConst.DefaultPaddle_Y);
-            paddle.setWidth(GameConst.PaddleWidth);
-
-            ball.setX(GameConst.DefaultBall_X);
-            ball.setY(GameConst.DefaultBall_Y);
-            ball.setSpeed(GameConst.DefaultSpeed);
-
-            paddle.setPaddleSliding(false);
-            ball.setBallMoving(false);
-
-            Renderer.getInstance().renderBackground();
-            bricks.forEach(b -> b.render());
-            paddle.render();
-            ball.render();
-
+            startGame();
         }
     }
 
-    public boolean gameOver() {
+    public static boolean gameOver() {
         if (ball.getY() >= 525 && ball.isBallMoving()) {
             setLives(getLives() - 1);
 
@@ -380,45 +365,5 @@ public class GameEngine {
     }
 
 
-    public static void startLoop() {
-        if (gameLoop == null) {
-            gameLoop = new AnimationTimer() {
-                @Override
-                public void handle(long now) {
-                    if (getGameState() == 1) {
-                        update();
-                    }
-                    render();
-                }
-            };
-        }
-        gameLoop.start();
-    }
 
-    public static void stopLoop() {
-        if (gameLoop != null) {
-            gameLoop.stop();
-            gameLoop = null;
-        }
-        gameState = 0;
-    }
-
-    private static void update() {
-        try {
-            GameEngine engine = new GameEngine();
-            engine.updateGame();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static void render() {
-        Renderer.getInstance().renderBackground();
-        bricks.forEach(b -> {
-            if (!b.isDestroyed()) b.render();
-        });
-        powerUps.forEach(PowerUp::render);
-        paddle.render();
-        ball.render();
-    }
 }
