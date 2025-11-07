@@ -9,7 +9,7 @@
    <children>
       <VBox layoutX="359.3333333333333" layoutY="221.33333333333334" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="335.0" prefWidth="400.0" spacing="20.0" styleClass="image-button" stylesheets="@button_styles.css" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="240.0">
          <children>
-            <Button id="btnStart" fx:id="btnStart" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#startGame" prefHeight="94.0" prefWidth="397.0" styleClass="image-button" stylesheets="@button_styles.css">
+            <Button id="btnStart" fx:id="btnStart" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#newGame" prefHeight="94.0" prefWidth="397.0" styleClass="image-button" stylesheets="@button_styles.css">
                <VBox.margin>
                   <Insets />
                </VBox.margin>

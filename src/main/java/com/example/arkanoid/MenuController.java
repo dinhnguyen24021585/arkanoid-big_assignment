@@ -23,7 +23,7 @@ public class MenuController {
     static Scene gameScene;
 
     @FXML
-    public void startGame() throws Exception {
+    public void newGame() throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/arkanoid/arkanoid-view.fxml"));
         gameScene = new Scene(loader.load());
 
@@ -31,6 +31,7 @@ public class MenuController {
         stage.setScene(gameScene);
 
         GameEngine.getLevel().setLvl(1);
+        GameEngine.startGame();
     }
 
     @FXML

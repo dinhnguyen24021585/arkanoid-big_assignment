@@ -9,6 +9,7 @@ public class Renderer {
     private static Renderer instance;
     private GraphicsContext gc;
     private Image Bg = null;
+    private int currentLevel = -1;
 
     private Renderer() {
     }
@@ -84,8 +85,12 @@ public class Renderer {
 
     public void renderBackground() {
         if (gc == null || GameEngine.getLevel() == null) return;
-        Bg = new Image(getClass().getResourceAsStream(
-                "/com/example/arkanoid/Image/background" + GameEngine.getLevel().getLvl() + ".png"));
+
+        if (Bg == null || !Objects.equals(currentLevel, GameEngine.getLevel().getLvl())) {
+            Bg = new Image(getClass().getResourceAsStream(
+                    "/com/example/arkanoid/Image/background" + GameEngine.getLevel().getLvl() + ".png"));
+            currentLevel = GameEngine.getLevel().getLvl();
+        }
 
         gc.drawImage(Bg, 0, 0, GameConst.WIDTH, GameConst.HEIGHT);
     }
