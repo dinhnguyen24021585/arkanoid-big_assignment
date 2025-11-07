@@ -4,6 +4,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Slider;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.BufferedReader;
@@ -19,11 +21,26 @@ public class MenuController {
     private Button btnExit;
     @FXML
     private Button btnLvls;
+    @FXML
+    private Button btnVolume;
+    @FXML
+    private VBox volumeControlsContainer;
+    @FXML
+    private Slider bgmSlider;
+    @FXML
+    private Slider sfxSlider;
 
     static Scene gameScene;
 
     @FXML
-    public void newGame() throws Exception {
+    public void volumeSliders() {
+        boolean isVisible = volumeControlsContainer.isVisible();
+        volumeControlsContainer.setVisible(!isVisible);
+        volumeControlsContainer.setManaged(!isVisible);
+    }
+
+    @FXML
+    public void startGame() throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/arkanoid/arkanoid-view.fxml"));
         gameScene = new Scene(loader.load());
 
@@ -31,7 +48,6 @@ public class MenuController {
         stage.setScene(gameScene);
 
         GameEngine.getLevel().setLvl(1);
-        GameEngine.startGame();
     }
 
     @FXML
@@ -56,5 +72,25 @@ public class MenuController {
 
         Stage stage = (Stage) btnLvls.getScene().getWindow();
         stage.setScene(gameScene);
+    }
+
+    @FXML
+    public void initialize() {
+        setupVolumeBindings();
+    }
+
+    private void setupVolumeBindings() {
+        bgmSlider.setValue(Sound.getBgmVolume());
+        sfxSlider.setValue(Sound.getSfxVolume());
+
+        bgmSlider.valueProperty().addListener((obs,
+                                               oldValue, newValue) -> {
+            Sound.setBgmVolume(newValue.doubleValue());
+        });
+
+        sfxSlider.valueProperty().addListener((obs,
+                                               oldValue, newValue) -> {
+            Sound.setSfxVolume(newValue.doubleValue());
+        });
     }
 }

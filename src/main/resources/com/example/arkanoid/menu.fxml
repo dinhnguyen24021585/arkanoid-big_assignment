@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
@@ -19,5 +20,12 @@
             <Button id="btnExit" fx:id="btnExit" layoutX="100.0" layoutY="100.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#exitGame" prefHeight="94.0" prefWidth="397.0" styleClass="image-button" stylesheets="@button_styles.css" />
          </children>
       </VBox>
+      <VBox fx:id="volumeControlsContainer" layoutX="84.0" layoutY="23.0" managed="false" prefHeight="43.0" prefWidth="110.0" visible="false">
+         <children>
+            <Slider fx:id="bgmSlider" max="1.0" min="0.0" styleClass="volume-slider" stylesheets="@button_styles.css" value="0.5" />
+            <Slider fx:id="sfxSlider" max="1.0" min="0.0" prefHeight="43.0" prefWidth="124.0" styleClass="volume-slider" stylesheets="@button_styles.css" value="0.5" />
+         </children>
+      </VBox>
+      <Button id="btnVolume" fx:id="btnVolume" layoutX="8.0" layoutY="-6.0" mnemonicParsing="false" onAction="#volumeSliders" prefHeight="86.0" prefWidth="90.0" styleClass="image-button" stylesheets="@button_styles.css" />
    </children>
 </AnchorPane>
