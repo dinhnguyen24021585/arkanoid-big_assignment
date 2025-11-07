@@ -4,6 +4,9 @@ import javax.swing.*;
 //import java.awt.*;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.*;
+import javafx.geometry.Point2D;
+
+import java.util.LinkedList;
 
 public class Ball extends MovableObject {
     private int speed;
@@ -11,6 +14,8 @@ public class Ball extends MovableObject {
     private int directionY;
     private boolean ballMoving = false;
     private Image image;
+    private final int MAX_TRAIL_LENGTH = 10;
+    private LinkedList<Point2D> trailPoints;
 
     public Ball(int x, int y, int width, int height, int speed, int directionX, int directionY) {
         super();
@@ -25,7 +30,17 @@ public class Ball extends MovableObject {
         setDx(directionX * speed);
         setDy(directionY * speed);
 
+        this.trailPoints = new LinkedList<>();
+
         this.image = new Image(getClass().getResourceAsStream("/com/example/arkanoid/Image/ball.png"));
+    }
+
+    public int getMAX_TRAIL_LENGTH() {
+        return MAX_TRAIL_LENGTH;
+    }
+
+    public LinkedList<Point2D> getTrailPoints() {
+        return trailPoints;
     }
 
     public int getSpeed() {
@@ -57,6 +72,9 @@ public class Ball extends MovableObject {
     }
 
     public void setBallMoving(boolean ballMoving) {
+        if (this.ballMoving && !ballMoving) {
+            this.trailPoints.clear();
+        }
         this.ballMoving = ballMoving;
     }
 
@@ -123,7 +141,14 @@ public class Ball extends MovableObject {
 
     @Override
     public void update() {
-        move();
+        if (ballMoving) {
+            move();
+            trailPoints.addFirst(new Point2D(getX() + getWidth() / 2, getY() + getHeight() / 2));
+
+            while (trailPoints.size() > MAX_TRAIL_LENGTH) {
+                trailPoints.removeLast();
+            }
+        }
     }
 
     @Override

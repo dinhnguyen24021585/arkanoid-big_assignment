@@ -22,6 +22,8 @@ public class Arkanoid extends Application {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/arkanoid/menu.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 800, 600);
             stage.setTitle("JavaFX + SceneBuilder Demo");
+            Sound.initializeBGM("bgm.mp3");
+            Sound.playBGM();
 
             stage.setScene(scene);
             stage.show();

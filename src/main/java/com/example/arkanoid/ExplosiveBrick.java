@@ -18,7 +18,7 @@ public class ExplosiveBrick extends Brick {
     public int takeHits() {
         if (!destroyed) {
             destroyed = true;
-            Sound.play("Explosive.wav");
+            Sound.playSFX("Explosive.wav");
             explode(GameEngine.getBricks());
             return hitPoints;
         }

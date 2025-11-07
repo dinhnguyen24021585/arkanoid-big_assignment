@@ -38,7 +38,6 @@ public class ArkanoidController {
     private GameEngine gameEngine = new GameEngine();
 
     public void initialize() throws IOException, URISyntaxException {
-
         gc = gameCanvas.getGraphicsContext2D();
         Renderer.getInstance().setGraphicsContext(gc);
 
