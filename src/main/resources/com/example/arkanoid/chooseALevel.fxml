@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -22,5 +23,6 @@
         </rowConstraints>
 
       </GridPane>
+      <Button fx:id="btnQuitToMenu" layoutX="699.0" layoutY="516.0" mnemonicParsing="false" onAction="#quitToMenu" prefHeight="69.0" prefWidth="86.0" styleClass="image-button" stylesheets="@button_styles.css" />
    </children>
 </AnchorPane>

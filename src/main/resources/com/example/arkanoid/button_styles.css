@@ -68,6 +68,12 @@
     -fx-background-position: center;
 }
 
+.chooseLvl-background {
+    -fx-background-image: url("chooseLvl.png");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+}
+
 .volume-slider .track {
     -fx-background-color: transparent;
     -fx-background-image: url("slider_track.png");

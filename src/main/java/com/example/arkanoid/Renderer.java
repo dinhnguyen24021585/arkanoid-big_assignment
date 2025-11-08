@@ -114,8 +114,8 @@ public class Renderer {
         if (Bg == null || !Objects.equals(currentLevel, GameEngine.getLevel().getLvl())) {
             Bg = new Image(getClass().getResourceAsStream(
                     "/com/example/arkanoid/Image/background" + GameEngine.getLevel().getLvl() + ".png"));
-            currentLevel = GameEngine.getLevel().getLvl();
-        }
+
+        } currentLevel = GameEngine.getLevel().getLvl();
 
         gc.drawImage(Bg, 0, 0, GameConst.WIDTH, GameConst.HEIGHT);
     }

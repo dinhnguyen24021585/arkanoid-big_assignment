@@ -41,8 +41,6 @@ public class ArkanoidController {
         gc = gameCanvas.getGraphicsContext2D();
         Renderer.getInstance().setGraphicsContext(gc);
 
-        Level level = new Level(1);
-
         gameLoop = new AnimationTimer() {
             @Override
             public void handle(long l) {

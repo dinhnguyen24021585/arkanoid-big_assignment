@@ -40,24 +40,30 @@ public class MenuController {
     }
 
     @FXML
-    public void startGame() throws Exception {
+    public void newGame() throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/arkanoid/arkanoid-view.fxml"));
         gameScene = new Scene(loader.load());
+
+        GameEngine.getLevel().setLvl(1);
+        GameEngine.startGame();
 
         Stage stage = (Stage) btnStart.getScene().getWindow();
         stage.setScene(gameScene);
 
-        GameEngine.getLevel().setLvl(1);
+
     }
 
     @FXML
     public void loadGame() throws Exception {
-        Stage stage = (Stage) btnLoad.getScene().getWindow();
-        stage.setScene(gameScene);
         GameEngine.loadStateFromFile();
         GameEngine.getPaddle().setPaddleSliding(true);
         GameEngine.getBall().setBallMoving(true);
-        GameEngine.setGameState(1);
+        GameEngine.setGameState(0);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/arkanoid/arkanoid-view.fxml"));
+
+        Stage stage = (Stage) btnLoad.getScene().getWindow();
+        stage.setScene(new Scene(loader.load()));
+
     }
 
     @FXML
