@@ -273,7 +273,7 @@ public class GameEngine {
         }
     }
 
-    public boolean gameOver() {
+    public static boolean gameOver() {
         // Main ball lost
         if (ball.getY() >= 525 && ball.isBallMoving()) {
             ball.setBallMoving(false);
@@ -290,7 +290,7 @@ public class GameEngine {
         extraBalls.removeAll(lostExtraBalls);
 
         boolean hasGameStarted = ball.isBallMoving() || !extraBalls.isEmpty() || getGameState() == 0;
-        boolean allBallsLost = !ball.isBallMoving() && extraBalls.isEmpty();
+        boolean allBallsLost = ball.getY() >= 525 && extraBalls.isEmpty();
 
         boolean shouldGameOver = hasGameStarted && allBallsLost;
 
@@ -370,6 +370,7 @@ public class GameEngine {
             bricks.clear();
             powerUps.clear();
             extraBalls.clear();
+            GameEngine.getLevel().setNumOfBricksToLvlUp(0);
 
             String line;
             while ((line = reader.readLine()) != null) {
@@ -414,10 +415,15 @@ public class GameEngine {
                             default -> null;
                         };
 
+                        if (!(b instanceof UnbreakableBrick)) {
+                            GameEngine.getLevel().setNumOfBricksToLvlUp(getLevel().getNumOfBricksToLvlUp() + 1);
+                        }
+
                         if (b != null) {
                             b.setDestroyed(destroyed);
                             bricks.add(b);
                         }
+
                     }
 
                     case "powerup" -> {

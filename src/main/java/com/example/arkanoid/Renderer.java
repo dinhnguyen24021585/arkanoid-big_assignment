@@ -12,6 +12,8 @@ public class Renderer {
     private GraphicsContext gc;
     private Image Bg = null;
     private int currentLevel = -1;
+    private final static Color COLOR_FAR = Color.rgb(255, 0, 0);
+    private final static Color COLOR_NEAR = Color.rgb(0, 255, 0);
 
     private Renderer() {
     }

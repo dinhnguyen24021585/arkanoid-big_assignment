@@ -56,8 +56,8 @@ public class MenuController {
     @FXML
     public void loadGame() throws Exception {
         GameEngine.loadStateFromFile();
-        GameEngine.getPaddle().setPaddleSliding(true);
-        GameEngine.getBall().setBallMoving(true);
+//        GameEngine.getPaddle().setPaddleSliding(false);
+//        GameEngine.getBall().setBallMoving(false);
         GameEngine.setGameState(0);
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/arkanoid/arkanoid-view.fxml"));
 
