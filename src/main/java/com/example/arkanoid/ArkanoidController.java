@@ -35,53 +35,45 @@ public class ArkanoidController {
     private GraphicsContext gc;
     private MouseEvent mouseEvent;
 
-    private GameEngine gameEngine = new GameEngine();
+    static AnimationTimer gameLoop;
 
     public void initialize() throws IOException, URISyntaxException {
-
         gc = gameCanvas.getGraphicsContext2D();
         Renderer.getInstance().setGraphicsContext(gc);
 
-        Level level = new Level(1);
-
-        gameEngine.startGame();
-        AnimationTimer gameLoop = new AnimationTimer() {
+        gameLoop = new AnimationTimer() {
             @Override
             public void handle(long l) {
-                gameEngine.handleInput(gameCanvas);
+                GameEngine.handleInput(gameCanvas);
                 if (getBall().isBallMoving())
                     gc.clearRect(0, 0, gameCanvas.getWidth(), gameCanvas.getHeight());
 
                 if (getGameState() == 0) {
                     try {
-                        gameEngine.updateGame();
+                        GameEngine.updateGame();
                     } catch (IOException | URISyntaxException | InterruptedException e) {
                         throw new RuntimeException(e);
                     }
 
-                    gameEngine.checkCollision();
-
+                    GameEngine.checkCollision();
                 }
                 
                 gc.setFill(Color.BLACK);
                 gc.setFont(Font.font("Arial", GameConst.FontSize));
                 gc.fillText(String.format("Level %d", GameEngine.getLevel().getLvl()), 0,
                         GameConst.HEIGHT - GameConst.FontSize);
-                gc.fillText(String.format("Score: %d", gameEngine.getScore()), 350,
+                gc.fillText(String.format("Score: %d", GameEngine.getScore()), 350,
                         GameConst.HEIGHT - GameConst.FontSize);
                 gc.fillText(String.format("Live(s): %d", GameEngine.getLives()), 700,
                         GameConst.HEIGHT - GameConst.FontSize);
 
-                if (gameEngine.gameOver()){
+                if (GameEngine.gameOver()){
                     try {
-                        gameEngine.startGame();
+                        startGame();
                     } catch (IOException | URISyntaxException e) {
                         throw new RuntimeException(e);
                     }
                 }
-
-                //if (GameEngine.getLevel().getNumOfBricksToLvlUp() == 0)
-
             }
         };
 

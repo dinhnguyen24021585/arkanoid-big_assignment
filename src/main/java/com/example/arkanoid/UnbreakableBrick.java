@@ -7,7 +7,7 @@ public class UnbreakableBrick extends Brick {
 
     @Override
     public int takeHits() {
-        Sound.play("Hit.wav");
+        Sound.playSFX("Hit.wav");
         return 0;
     }
 }
