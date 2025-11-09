@@ -9,12 +9,10 @@ target/
 .idea/compiler.xml
 .idea/libraries/
 .idea/
-save_state.txt
 .mvn/
 *.iws
 *.iml
 *.ipr
-
 
 ### Eclipse ###
 .apt_generated

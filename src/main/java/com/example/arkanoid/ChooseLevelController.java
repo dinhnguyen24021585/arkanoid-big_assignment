@@ -64,9 +64,6 @@ public class ChooseLevelController {
             Button clicked = (Button) event.getSource();
             int level = Integer.parseInt(clicked.getText());
 
-            GameEngine.setArcadeMode(false);
-            GameEngine.setScore(0);
-
             GameEngine.getLevel().setLvl(level);
 
             GameEngine.startGame();
