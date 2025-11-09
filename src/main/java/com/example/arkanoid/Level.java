@@ -15,7 +15,8 @@ public class Level {
     private int numOfBricksToLvlUp;
     private static boolean[] chooseLevel = new boolean[10];
 
-    public Level() {}
+    public Level() {
+    }
 
     public Level(int lvl) {
         this.lvl = lvl;
@@ -82,9 +83,9 @@ public class Level {
             }
         }
 
-        int numOfPowers = (int) Math.floor(Math.random() * 30) + 10;
+        int numOfPowers = (int) Math.floor(Math.random() * 20) + 10;
         for (int i = 0; i < numOfPowers; i++) {
-            int typeOfPower = (int) Math.floor(Math.random() * 7) + 1;
+            int typeOfPower = (int) Math.floor(Math.random() * 5) + 1;
 
             int location = (int) Math.floor(Math.random() * 40);
             if (isBricksShown[location / 10][location % 10] != 0
@@ -101,22 +102,19 @@ public class Level {
                 });
 
                 if (typeOfPower == 1 && !overlap.get()) {
-                    PowerUp powerUp = new ExpandPaddlePowerUp(x,y);
+                    PowerUp powerUp = new ExpandPaddlePowerUp(x, y);
                     powerUps.add(powerUp);
                 } else if (typeOfPower == 2 && !overlap.get()) {
-                    PowerUp powerUp = new FastBallPowerUp(x,y);
+                    PowerUp powerUp = new FastBallPowerUp(x, y);
                     powerUps.add(powerUp);
-                } else if(typeOfPower == 3 && !overlap.get()) {
-                    PowerUp powerUp = new HeartPowerUp(x,y);
+                } else if (typeOfPower == 3 && !overlap.get()) {
+                    PowerUp powerUp = new HeartPowerUp(x, y);
                     powerUps.add(powerUp);
-                } else if(typeOfPower == 4 && !overlap.get()) {
-                    PowerUp powerUp = new BalancedMultiballPowerUp(x,y);
+                } else if (typeOfPower == 4 && !overlap.get()) {
+                    PowerUp powerUp = new BalancedMultiballPowerUp(x, y);
                     powerUps.add(powerUp);
-                } else if (typeOfPower == 6 && !overlap.get()) {
-                    PowerUp powerUp = new ReverseControlPowerUp(x, y);
-                    powerUps.add(powerUp);
-                } else if (typeOfPower == 7 && !overlap.get()) {
-                    PowerUp powerUp = new PortalPowerUp(x, y);
+                } else if (typeOfPower == 5 && !overlap.get()) {
+                    PowerUp powerUp = new ShootingPowerUp(x, y);
                     powerUps.add(powerUp);
                 }
             }
