@@ -20,6 +20,7 @@ public class GameEngine {
     private static int lives;
     private static int gameState;
     private static AnimationTimer gameLoop;
+    private static ShootingPowerUp shootingPowerUp = null;
 
     private static ArrayList<Ball> extraBalls = new ArrayList<>();
 
@@ -111,6 +112,14 @@ public class GameEngine {
         return extraBalls;
     }
 
+    public static ShootingPowerUp getShootingPowerUp() {
+        return shootingPowerUp;
+    }
+
+    public static void setShootingPowerUp(ShootingPowerUp powerUp) {
+        GameEngine.shootingPowerUp = powerUp;
+    }
+
     public static void addExtraBalls(ArrayList<Ball> balls) {
         extraBalls.addAll(balls);
     }
@@ -153,6 +162,7 @@ public class GameEngine {
         bricks.forEach(b -> b.render());
         powerUps.forEach(p -> p.render());
 
+        shootingPowerUp = null;
         setLives(GameConst.DefaultLives);
         setScore(0);
        // setGameState(1);
@@ -170,6 +180,14 @@ public class GameEngine {
             ball.update();
         }
         ball.render();
+
+        if (shootingPowerUp != null) {
+            shootingPowerUp.updateBullets();
+
+            if (!shootingPowerUp.isEffectActive()) {
+                shootingPowerUp = null;
+            }
+        }
 
         for (Ball extraBall : extraBalls) {
             if (extraBall.isBallMoving()) {
@@ -240,6 +258,9 @@ public class GameEngine {
         }
 
         powerUps.forEach(powerUp -> powerUp.checkPaddleCollision(GameEngine.paddle));
+        if (shootingPowerUp != null && shootingPowerUp.isEffectActive()) {
+            shootingPowerUp.renderBullets();
+        }
     }
 
     public static void levelUp() throws IOException, URISyntaxException {
@@ -268,6 +289,7 @@ public class GameEngine {
             powerUps.forEach(p -> p.render());
             paddle.render();
             ball.render();
+            shootingPowerUp = null;
 
             System.out.println("LEVEL UP! Now level: " + level.getLvl());
         }
@@ -310,6 +332,7 @@ public class GameEngine {
             ball.setBallMoving(false);
 
             extraBalls.clear();
+            shootingPowerUp = null;
 
             Renderer.getInstance().renderBackground();
             bricks.forEach(b -> {
@@ -327,6 +350,7 @@ public class GameEngine {
             paddle.setWidth(GameConst.PaddleWidth);
             ball.setSpeed(GameConst.DefaultSpeed);
             extraBalls.clear();
+            shootingPowerUp = null;
             level.setNumOfBricksToLvlUp(0);
             return true;
         }
@@ -475,7 +499,4 @@ public class GameEngine {
             System.out.println(e.getMessage());
         }
     }
-
-
-
 }
