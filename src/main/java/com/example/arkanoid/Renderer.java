@@ -12,8 +12,8 @@ public class Renderer {
     private GraphicsContext gc;
     private Image Bg = null;
     private int currentLevel = -1;
-    private final static Color COLOR_FAR = Color.rgb(255, 0, 0);
-    private final static Color COLOR_NEAR = Color.rgb(0, 255, 0);
+    private final static Color COLOR_FAR = Color.rgb(150, 200, 255);
+    private final static Color COLOR_NEAR = Color.rgb(240, 255, 255);
 
     private Renderer() {
     }
@@ -111,8 +111,38 @@ public class Renderer {
                             powerUp.getWidth(),
                             powerUp.getHeight()
                     );
+                } else if (powerUp instanceof ShootingPowerUp shootingPowerUp) {
+                    gc.drawImage(
+                            shootingPowerUp.getImage(),
+                            powerUp.getX(),
+                            powerUp.getY(),
+                            powerUp.getWidth(),
+                            powerUp.getHeight()
+                    );
                 }
             }
+        }
+    }
+
+    public void render(Bullet bullet) {
+        if (gc == null || bullet == null) return;
+
+        if (bullet.getImage() != null) {
+            gc.drawImage(
+                    bullet.getImage(),
+                    bullet.getX(),
+                    bullet.getY(),
+                    bullet.getWidth(),
+                    bullet.getHeight()
+            );
+        } else {
+            gc.setFill(Color.YELLOW);
+            gc.fillRect(
+                    bullet.getX(),
+                    bullet.getY(),
+                    bullet.getWidth(),
+                    bullet.getHeight()
+            );
         }
     }
 
