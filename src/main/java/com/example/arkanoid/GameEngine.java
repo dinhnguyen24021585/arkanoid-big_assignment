@@ -155,6 +155,14 @@ public class GameEngine {
     public static int getPortal2X() { return portal2X; }
     public static int getPortal2Y() { return portal2Y; }
 
+    public static ShootingPowerUp getShootingPowerUp() {
+        return shootingPowerUp;
+    }
+
+    public static void setShootingPowerUp(ShootingPowerUp powerUp) {
+        GameEngine.shootingPowerUp = powerUp;
+    }
+
     public static void addExtraBalls(ArrayList<Ball> balls) {
         extraBalls.addAll(balls);
     }
@@ -197,6 +205,7 @@ public class GameEngine {
         bricks.forEach(b -> b.render());
         powerUps.forEach(p -> p.render());
 
+        shootingPowerUp = null;
         setLives(GameConst.DefaultLives);
         setScore(0);
         // setGameState(1);
@@ -310,6 +319,9 @@ public class GameEngine {
         }
 
         powerUps.forEach(powerUp -> powerUp.checkPaddleCollision(GameEngine.paddle));
+        if (shootingPowerUp != null && shootingPowerUp.isEffectActive()) {
+            shootingPowerUp.renderBullets();
+        }
     }
 
     public static void levelUp() throws IOException, URISyntaxException {

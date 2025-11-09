@@ -112,6 +112,9 @@ public class Level {
                 } else if(typeOfPower == 4 && !overlap.get()) {
                     PowerUp powerUp = new BalancedMultiballPowerUp(x,y);
                     powerUps.add(powerUp);
+                } else if (typeOfPower == 5 && !overlap.get()) {
+                    PowerUp powerUp = new ShootingPowerUp(x, y);
+                    powerUps.add(powerUp);
                 } else if (typeOfPower == 6 && !overlap.get()) {
                     PowerUp powerUp = new ReverseControlPowerUp(x, y);
                     powerUps.add(powerUp);
