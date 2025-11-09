@@ -44,13 +44,12 @@ public class MenuController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/arkanoid/arkanoid-view.fxml"));
         gameScene = new Scene(loader.load());
 
+        GameEngine.setArcadeMode(true);
         GameEngine.getLevel().setLvl(1);
         GameEngine.startGame();
 
         Stage stage = (Stage) btnStart.getScene().getWindow();
         stage.setScene(gameScene);
-
-
     }
 
     @FXML
@@ -64,7 +63,6 @@ public class MenuController {
         MenuController.gameScene = new Scene(loader.load());
         Stage stage = (Stage) btnLoad.getScene().getWindow();
         stage.setScene(MenuController.gameScene);
-
     }
 
     @FXML

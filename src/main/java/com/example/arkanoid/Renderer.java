@@ -111,38 +111,8 @@ public class Renderer {
                             powerUp.getWidth(),
                             powerUp.getHeight()
                     );
-                } else if (powerUp instanceof ShootingPowerUp shootingPowerUp) {
-                    gc.drawImage(
-                            shootingPowerUp.getImage(),
-                            powerUp.getX(),
-                            powerUp.getY(),
-                            powerUp.getWidth(),
-                            powerUp.getHeight()
-                    );
                 }
             }
-        }
-    }
-
-    public void render(Bullet bullet) {
-        if (gc == null || bullet == null) return;
-
-        if (bullet.getImage() != null) {
-            gc.drawImage(
-                    bullet.getImage(),
-                    bullet.getX(),
-                    bullet.getY(),
-                    bullet.getWidth(),
-                    bullet.getHeight()
-            );
-        } else {
-            gc.setFill(Color.YELLOW);
-            gc.fillRect(
-                    bullet.getX(),
-                    bullet.getY(),
-                    bullet.getWidth(),
-                    bullet.getHeight()
-            );
         }
     }
 
