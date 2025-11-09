@@ -1,4 +1,8 @@
 level=1
+score=14
+lives=1
+paddle=687,500,true
+ball=675,85,true
 score=0
 lives=3
 isArcadeMode=false
