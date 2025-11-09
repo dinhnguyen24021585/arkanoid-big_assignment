@@ -12,6 +12,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -29,8 +30,6 @@ public class ArkanoidController {
 
     @FXML
     private Button btnPause;
-    @FXML
-    private Button btnReplay;
 
     private GraphicsContext gc;
     private MouseEvent mouseEvent;
@@ -57,20 +56,25 @@ public class ArkanoidController {
 
                     GameEngine.checkCollision();
                 }
-                
-                gc.setFill(Color.BLACK);
-                gc.setFont(Font.font("Arial", GameConst.FontSize));
-                gc.fillText(String.format("Level %d", GameEngine.getLevel().getLvl()), 0,
+
+                gc.setFill(Color.rgb(255, 230, 245));
+                gc.setFont(Font.font("Tahoma", FontWeight.BOLD, GameConst.FontSize));
+                gc.fillText(String.format("Level %d", GameEngine.getLevel().getLvl()), 10,
                         GameConst.HEIGHT - GameConst.FontSize);
-                gc.fillText(String.format("Score: %d", GameEngine.getScore()), 350,
-                        GameConst.HEIGHT - GameConst.FontSize);
-                gc.fillText(String.format("Live(s): %d", GameEngine.getLives()), 700,
-                        GameConst.HEIGHT - GameConst.FontSize);
+                gc.fillText(String.format("Live(s): %d", GameEngine.getLives()), 10, GameConst.FontSize);
+
+                if (GameEngine.isArcadeMode()) {
+                    gc.fillText(String.format("Score: %d", GameEngine.getScore()), 350,
+                            GameConst.HEIGHT - GameConst.FontSize);
+                    gc.fillText(String.format("High Score: %d", GameEngine.getHighScore()),
+                            600, GameConst.FontSize);
+                }
 
                 if (GameEngine.gameOver()){
+                    gameLoop.stop();
                     try {
-                        startGame();
-                    } catch (IOException | URISyntaxException e) {
+                        loadGameOverScreen();
+                    } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
                 }
@@ -78,7 +82,6 @@ public class ArkanoidController {
         };
 
         gameLoop.start();
-
     }
 
     @FXML
@@ -92,6 +95,12 @@ public class ArkanoidController {
         setGameState(1);
     }
 
+    public void loadGameOverScreen() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/arkanoid/gameOver.fxml"));
+        Scene gameOverScene = new Scene(loader.load());
 
-
+        Stage stage = (Stage) gameCanvas.getScene().getWindow();
+        stage.setScene(gameOverScene);
+        GameEngine.setGameState(1);
+    }
 }

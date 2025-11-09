@@ -59,10 +59,11 @@ public class MenuController {
 //        GameEngine.getPaddle().setPaddleSliding(false);
 //        GameEngine.getBall().setBallMoving(false);
         GameEngine.setGameState(0);
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/arkanoid/arkanoid-view.fxml"));
 
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/arkanoid/arkanoid-view.fxml"));
+        MenuController.gameScene = new Scene(loader.load());
         Stage stage = (Stage) btnLoad.getScene().getWindow();
-        stage.setScene(new Scene(loader.load()));
+        stage.setScene(MenuController.gameScene);
 
     }
 
