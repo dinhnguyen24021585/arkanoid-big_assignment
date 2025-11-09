@@ -23,10 +23,11 @@ public class PauseController {
     @FXML
     public void gameContinue() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/arkanoid/arkanoid-view.fxml"));
-
+        GameEngine.setGameState(0);
+        ArkanoidController.gameLoop.start();
         Stage stage = (Stage) btnContinue.getScene().getWindow();
         stage.setScene(MenuController.gameScene);
-        GameEngine.setGameState(0);
+
     }
 
     @FXML
