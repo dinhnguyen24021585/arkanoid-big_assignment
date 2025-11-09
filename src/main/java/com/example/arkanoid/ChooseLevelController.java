@@ -21,6 +21,9 @@ public class ChooseLevelController {
     @FXML
     private AnchorPane anchorPane;
 
+    @FXML
+    private Button btnQuitToMenu;
+
     private ArrayList<Button> buttons = new ArrayList<>();
 
     @FXML
@@ -61,6 +64,9 @@ public class ChooseLevelController {
             Button clicked = (Button) event.getSource();
             int level = Integer.parseInt(clicked.getText());
 
+            GameEngine.setArcadeMode(false);
+            GameEngine.setScore(0);
+
             GameEngine.getLevel().setLvl(level);
 
             GameEngine.startGame();
@@ -70,6 +76,15 @@ public class ChooseLevelController {
         } catch (IOException | URISyntaxException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @FXML
+    public void quitToMenu() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/arkanoid/menu.fxml"));
+        Scene menuScene = new Scene(loader.load());
+
+        Stage stage = (Stage) btnQuitToMenu.getScene().getWindow();
+        stage.setScene(menuScene);
     }
 }
 

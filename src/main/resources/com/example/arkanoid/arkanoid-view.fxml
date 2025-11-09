@@ -8,6 +8,6 @@
 
     <children>
       <Canvas fx:id="gameCanvas" height="600.0" width="800.0" />
-      <Button id="btnPause" fx:id="btnPause" layoutX="738.0" layoutY="536.0" mnemonicParsing="false" onAction="#pause" prefHeight="49.0" prefWidth="47.0" styleClass="image-button" stylesheets="@button_styles.css" />
+      <Button id="btnPause" fx:id="btnPause" layoutX="738.0" layoutY="536.0" mnemonicParsing="false" onAction="#pause" prefHeight="49.0" prefWidth="47.0" styleClass="image-button" stylesheets="@styles.css" />
     </children>
 </AnchorPane>

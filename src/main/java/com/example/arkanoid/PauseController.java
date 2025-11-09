@@ -17,7 +17,6 @@ import static com.example.arkanoid.GameEngine.startGame;
 public class PauseController {
     @FXML
     public Button btnContinue;
-    public Button btnSave;
     public Button btnReplay;
     public Button btnQuitToMenu;
 
@@ -30,19 +29,22 @@ public class PauseController {
         GameEngine.setGameState(0);
     }
 
-    public void saveGame() {
-    }
-
     @FXML
     public void replay() throws IOException, URISyntaxException {
-        startGame();
+        if (GameEngine.isArcadeMode()) {
+            GameEngine.saveNewHighScore(GameEngine.getScore());
+            GameEngine.getLevel().setLvl(1);
+            GameEngine.setScore(0);
+            GameEngine.startGame();
+        } else {
+            GameEngine.startGame();
+        }
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/arkanoid/arkanoid-view.fxml"));
 
         Stage stage = (Stage) btnContinue.getScene().getWindow();
         stage.setScene(MenuController.gameScene);
         GameEngine.setGameState(0);
-
     }
 
     @FXML

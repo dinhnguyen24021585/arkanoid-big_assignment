@@ -12,8 +12,8 @@ public class Renderer {
     private GraphicsContext gc;
     private Image Bg = null;
     private int currentLevel = -1;
-    private static final Color COLOR_NEAR = Color.rgb(150, 200, 255);
-    private static final Color COLOR_FAR = Color.rgb(240, 255, 255);
+    private final static Color COLOR_FAR = Color.rgb(150, 200, 255);
+    private final static Color COLOR_NEAR = Color.rgb(240, 255, 255);
 
     private Renderer() {
     }
@@ -98,6 +98,14 @@ public class Renderer {
                 } else if (powerUp instanceof HeartPowerUp heartPowerUp) {
                     gc.drawImage(
                             heartPowerUp.getImage(),
+                            powerUp.getX(),
+                            powerUp.getY(),
+                            powerUp.getWidth(),
+                            powerUp.getHeight()
+                    );
+                } else if (powerUp instanceof BalancedMultiballPowerUp balancedMultiball) {
+                    gc.drawImage(
+                            balancedMultiball.getImage(),
                             powerUp.getX(),
                             powerUp.getY(),
                             powerUp.getWidth(),
