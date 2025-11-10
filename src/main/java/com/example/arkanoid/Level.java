@@ -84,7 +84,7 @@ public class Level {
 
         int numOfPowers = (int) Math.floor(Math.random() * 30) + 10;
         for (int i = 0; i < numOfPowers; i++) {
-            int typeOfPower = (int) Math.floor(Math.random() * 5) + 1;
+            int typeOfPower = (int) Math.floor(Math.random() * 7) + 1;
 
             int location = (int) Math.floor(Math.random() * 40);
             if (isBricksShown[location / 10][location % 10] != 0
@@ -111,6 +111,12 @@ public class Level {
                     powerUps.add(powerUp);
                 } else if(typeOfPower == 4 && !overlap.get()) {
                     PowerUp powerUp = new BalancedMultiballPowerUp(x,y);
+                    powerUps.add(powerUp);
+                } else if (typeOfPower == 6 && !overlap.get()) {
+                    PowerUp powerUp = new ReverseControlPowerUp(x, y);
+                    powerUps.add(powerUp);
+                } else if (typeOfPower == 7 && !overlap.get()) {
+                    PowerUp powerUp = new PortalPowerUp(x, y);
                     powerUps.add(powerUp);
                 }
             }
