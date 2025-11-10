@@ -22,6 +22,11 @@ public class GameEngine {
     private static boolean arcadeMode = true;
     private static final String highScoreFile = "high_score.txt";
     private static AnimationTimer gameLoop;
+    private static ShootingPowerUp shootingPowerUp = null;
+    private static boolean reverseControls = false;
+    private static boolean gravityReversed = false;
+    private static boolean portalsActive = false;
+    private static int portal1X, portal1Y, portal2X, portal2Y;
 
     private static ArrayList<Ball> extraBalls = new ArrayList<>();
 
@@ -121,6 +126,35 @@ public class GameEngine {
         return extraBalls;
     }
 
+    public static boolean isReverseControls() {
+        return reverseControls;
+    }
+
+    public static void setReverseControls(boolean reverse) {
+        GameEngine.reverseControls = reverse;
+    }
+
+    public static boolean isGravityReversed() {
+        return gravityReversed;
+    }
+
+    public static void setGravityReversed(boolean reversed) {
+        GameEngine.gravityReversed = reversed;
+    }
+
+    public static boolean isPortalsActive() { return portalsActive; }
+    public static void setPortals(int x1, int y1, int x2, int y2) {
+        portal1X = x1; portal1Y = y1;
+        portal2X = x2; portal2Y = y2;
+        portalsActive = true;
+    }
+    public static void disablePortals() { portalsActive = false; }
+
+    public static int getPortal1X() { return portal1X; }
+    public static int getPortal1Y() { return portal1Y; }
+    public static int getPortal2X() { return portal2X; }
+    public static int getPortal2Y() { return portal2Y; }
+
     public static void addExtraBalls(ArrayList<Ball> balls) {
         extraBalls.addAll(balls);
     }
@@ -148,7 +182,7 @@ public class GameEngine {
 
         GameEngine.paddle.render();
         GameEngine.ball.render();
-
+        GameEngine.disablePortals();
 
         HeartPowerUp.resetHeartCounter();
 
@@ -180,6 +214,18 @@ public class GameEngine {
             ball.update();
         }
         ball.render();
+
+        if (shootingPowerUp != null) {
+            shootingPowerUp.updateBullets();
+
+            if (!shootingPowerUp.isEffectActive()) {
+                shootingPowerUp = null;
+            }
+        }
+
+        if (portalsActive) {
+            Renderer.getInstance().renderPortals();
+        }
 
         for (Ball extraBall : extraBalls) {
             if (extraBall.isBallMoving()) {
@@ -235,7 +281,19 @@ public class GameEngine {
         gameCanvas.setOnMouseMoved(MouseEvent -> {
             if (MouseEvent.getX() - paddle.getWidth() / 2 >= 0
                     && MouseEvent.getX() + paddle.getWidth() / 2 < gameCanvas.getWidth() && gameState == 0) {
-                if (paddle.isPaddleSliding()) paddle.setX((int) MouseEvent.getX() - GameConst.PaddleWidth / 2);
+                if (paddle.isPaddleSliding()) {
+                    int targetX = (int) MouseEvent.getX() - GameConst.PaddleWidth / 2;
+
+                    // ĐẢO NGƯỢC ĐIỀU KHIỂN :)))
+                    if (reverseControls) {
+                        // Di chuyển chuột sang TRÁI → paddle sang PHẢI và ngược lại
+                        int screenCenter = GameConst.WIDTH / 2;
+                        int distanceFromCenter = (int) MouseEvent.getX() - screenCenter;
+                        targetX = screenCenter - distanceFromCenter - GameConst.PaddleWidth / 2;
+                    }
+
+                    paddle.setX(targetX);
+                }
             }
         });
     }
@@ -280,6 +338,8 @@ public class GameEngine {
             powerUps.forEach(p -> p.render());
             paddle.render();
             ball.render();
+            shootingPowerUp = null;
+            GameEngine.disablePortals();
 
             System.out.println("LEVEL UP! Now level: " + level.getLvl());
         }
@@ -322,6 +382,8 @@ public class GameEngine {
             ball.setBallMoving(false);
 
             extraBalls.clear();
+            shootingPowerUp = null;
+            GameEngine.disablePortals();
 
             Renderer.getInstance().renderBackground();
             bricks.forEach(b -> {
@@ -343,6 +405,8 @@ public class GameEngine {
             paddle.setWidth(GameConst.PaddleWidth);
             ball.setSpeed(GameConst.DefaultSpeed);
             extraBalls.clear();
+            shootingPowerUp = null;
+            GameEngine.disablePortals();
             level.setNumOfBricksToLvlUp(0);
             return true;
         }
@@ -387,6 +451,7 @@ public class GameEngine {
             powerUps.clear();
             extraBalls.clear();
             GameEngine.getLevel().setNumOfBricksToLvlUp(0);
+            GameEngine.disablePortals();
 
             String line;
             while ((line = reader.readLine()) != null) {

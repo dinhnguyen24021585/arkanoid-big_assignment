@@ -6,6 +6,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 public class Renderer {
     private static Renderer instance;
@@ -111,9 +113,112 @@ public class Renderer {
                             powerUp.getWidth(),
                             powerUp.getHeight()
                     );
+                } else if (powerUp instanceof ShootingPowerUp shootingPowerUp) {
+                    gc.drawImage(
+                            shootingPowerUp.getImage(),
+                            powerUp.getX(),
+                            powerUp.getY(),
+                            powerUp.getWidth(),
+                            powerUp.getHeight()
+                    );
+                } else if (powerUp instanceof ReverseControlPowerUp reversePowerUp) {
+                    gc.drawImage(
+                            reversePowerUp.getImage(),
+                            powerUp.getX(),
+                            powerUp.getY(),
+                            powerUp.getWidth(),
+                            powerUp.getHeight()
+                    );
+                } else if (powerUp instanceof PortalPowerUp portalPowerUp) {
+                    gc.drawImage(
+                            portalPowerUp.getImage(),
+                            powerUp.getX(),
+                            powerUp.getY(),
+                            powerUp.getWidth(),
+                            powerUp.getHeight()
+                    );
                 }
             }
         }
+    }
+
+    public void render(Bullet bullet) {
+        if (gc == null || bullet == null) return;
+
+        if (bullet.getImage() != null) {
+            gc.drawImage(
+                    bullet.getImage(),
+                    bullet.getX(),
+                    bullet.getY(),
+                    bullet.getWidth(),
+                    bullet.getHeight()
+            );
+        } else {
+            gc.setFill(Color.YELLOW);
+            gc.fillRect(
+                    bullet.getX(),
+                    bullet.getY(),
+                    bullet.getWidth(),
+                    bullet.getHeight()
+            );
+        }
+    }
+
+    public void renderPortals() {
+        if (gc == null || !GameEngine.isPortalsActive()) return;
+
+        int portalX = GameEngine.getPortal1X();
+        int portalY = GameEngine.getPortal1Y();
+        gc.save();
+
+        long currentTime = System.currentTimeMillis();
+        double baseRotation = (currentTime * 0.08) % 360;
+        double tilt = 15;
+
+        gc.translate(portalX + 30, portalY + 30);
+        gc.rotate(baseRotation + tilt);
+
+        drawGoldenPortal(gc);
+
+        gc.restore();
+        gc.setFill(Color.WHITE);
+        gc.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        gc.fillText("🪞 GOLDEN MIRROR PORTAL", 320, 30);
+    }
+
+    private void drawGoldenPortal(GraphicsContext gc) {
+        int size = 80;
+        long currentTime = System.currentTimeMillis();
+
+        double glow = Math.sin(currentTime * 0.01) * 0.3 + 0.7;
+        gc.setFill(Color.rgb(255, 215, 0, glow));
+        gc.fillOval(-size/2, -size/2, size, size);
+
+        gc.setStroke(Color.rgb(80, 60, 0)); // Nâu đậm ánh vàng
+        gc.setLineWidth(3);
+        gc.strokeOval(-size/2, -size/2, size, size);
+
+        double rotation = (currentTime * 0.08) % 360;
+
+        for (int i = 0; i < 3; i++) {
+            double angle = Math.toRadians(rotation + i * 120);
+            double startX = Math.cos(angle) * 15;
+            double startY = Math.sin(angle) * 15;
+            double endX = Math.cos(angle) * 25;
+            double endY = Math.sin(angle) * 25;
+
+            double alpha = 0.5 + 0.3 * Math.sin(currentTime * 0.02 + i);
+            gc.setStroke(Color.rgb(255, 255, 150, alpha));
+            gc.setLineWidth(2);
+            gc.strokeLine(startX, startY, endX, endY);
+        }
+
+        double sparkle = Math.sin(currentTime * 0.015) * 0.4 + 0.6;
+        gc.setFill(Color.rgb(255, 255, 200, sparkle));
+        gc.fillOval(-6, -6, 12, 12);
+
+        gc.setFill(Color.rgb(255, 255, 100, 0.2));
+        gc.fillOval(-size/2 - 5, -size/2 - 5, size + 10, size + 10);
     }
 
     public void renderBackground() {
