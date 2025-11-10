@@ -63,7 +63,7 @@ public class ChooseLevelController {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/arkanoid/arkanoid-view.fxml"));
             Button clicked = (Button) event.getSource();
             int level = Integer.parseInt(clicked.getText());
-
+            MenuController.gameScene = new Scene(fxmlLoader.load());
             GameEngine.setArcadeMode(false);
             GameEngine.setScore(0);
 
@@ -72,7 +72,7 @@ public class ChooseLevelController {
             GameEngine.startGame();
             GameEngine.setGameState(0);
             Stage stage = (Stage) gridPane.getScene().getWindow();
-            stage.setScene(new Scene(fxmlLoader.load()));
+            stage.setScene(MenuController.gameScene);
         } catch (IOException | URISyntaxException e) {
             throw new RuntimeException(e);
         }
