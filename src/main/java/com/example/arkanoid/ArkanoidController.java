@@ -51,6 +51,10 @@ public class ArkanoidController {
                 if (getGameState() == 0) {
                     try {
                         GameEngine.updateGame();
+                        if (GameEngine.isPortalsActive()) {
+                            Renderer.getInstance().renderPortals();
+                        }
+
                     } catch (IOException | URISyntaxException | InterruptedException e) {
                         throw new RuntimeException(e);
                     }
@@ -91,7 +95,4 @@ public class ArkanoidController {
 
         setGameState(1);
     }
-
-
-
 }

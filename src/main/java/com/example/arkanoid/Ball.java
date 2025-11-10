@@ -1,7 +1,6 @@
 package com.example.arkanoid;
 
 import javax.swing.*;
-//import java.awt.*;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.*;
 import javafx.geometry.Point2D;
@@ -125,6 +124,108 @@ public class Ball extends MovableObject {
         }
     }
 
+    private void checkPortalTeleport() {
+        if (!GameEngine.isPortalsActive()) return;
+
+        int ballCenterX = getX() + getWidth()/2;
+        int ballCenterY = getY() + getHeight()/2;
+
+        int portalX = GameEngine.getPortal1X() + 40;
+        int portalY = GameEngine.getPortal1Y() + 40;
+
+        if (Math.abs(ballCenterX - portalX) < 50 &&
+                Math.abs(ballCenterY - portalY) < 50) {
+
+            teleportToRandomConfusingPosition();
+
+            System.out.println("CONFUSION TELEPORT!");
+        }
+    }
+
+    private void teleportToRandomConfusingPosition() {
+        int newX, newY;
+        int attempt = 0;
+
+        do {
+            int zone = (int)(Math.random() * 6);
+            switch (zone) {
+                case 0 -> {
+                    newX = 10;
+                    newY = 10;
+                }
+                case 1 -> {
+                    newX = GameConst.WIDTH - getWidth() - 10;
+                    newY = 10;
+                }
+                case 2 -> {
+                    newX = 10;
+                    newY = GameConst.HEIGHT - 200;
+                }
+                case 3 -> {
+                    newX = GameConst.WIDTH - getWidth() - 10;
+                    newY = GameConst.HEIGHT - 200;
+                }
+                case 4 -> {
+                    newX = GameConst.WIDTH / 2 - getWidth()/2;
+                    newY = 5;
+                }
+                case 5 -> {
+                    newX = Math.max( (int)(Math.random() * (GameConst.WIDTH - getWidth())), 0);
+                    newY = GameConst.HEIGHT - 150;
+                }
+                default -> {
+                    newX = getX();
+                    newY = getY();
+                }
+            }
+            attempt++;
+        } while (!isSafePosition(newX + getWidth()/2, newY + getHeight()/2) && attempt < 10);
+
+        setX(newX);
+        setY(newY);
+
+        if (Math.random() < 0.5) reverseX();
+        if (Math.random() < 0.5) reverseY();
+
+        System.out.println("Ball teleported to: " + newX + ", " + newY);
+    }
+
+    private boolean isSafePosition(int x, int y) {
+        for (Brick brick : GameEngine.getBricks()) {
+            if (!brick.isDestroyed() && brick instanceof UnbreakableBrick) {
+                if (x >= brick.getX() && x <= brick.getX() + brick.getWidth() &&
+                        y >= brick.getY() && y <= brick.getY() + brick.getHeight()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private void findSafeMirrorPosition(int targetX, int targetY) {
+        int safeX = targetX;
+        int safeY = targetY;
+
+        int[] offsets = {0, 50, -50, 100, -100, 150, -150};
+
+        for (int offsetX : offsets) {
+            for (int offsetY : offsets) {
+                int testX = targetX + offsetX;
+                int testY = targetY + offsetY;
+
+                if (testX >= 0 && testX <= GameConst.WIDTH &&
+                        testY >= 0 && testY <= GameConst.HEIGHT) {
+
+                    if (isSafePosition(testX, testY)) {
+                        setX(testX - getWidth()/2);
+                        setY(testY - getHeight()/2);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
     @Override
     public void move() {
         if (getX() + getDx() >= 0 && getX() + getDx() <= GameConst.WIDTH) {
@@ -143,6 +244,9 @@ public class Ball extends MovableObject {
     public void update() {
         if (ballMoving) {
             move();
+
+            checkPortalTeleport();
+
             trailPoints.addFirst(new Point2D(getX() + getWidth() / 2, getY() + getHeight() / 2));
 
             while (trailPoints.size() > MAX_TRAIL_LENGTH) {
@@ -155,5 +259,4 @@ public class Ball extends MovableObject {
     public void render() {
         Renderer.getInstance().render(this);
     }
-
 }
