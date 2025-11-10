@@ -19,8 +19,14 @@ public class GameEngine {
     private static int score = 0;
     private static int lives;
     private static int gameState;
+    private static boolean arcadeMode = true;
+    private static final String highScoreFile = "high_score.txt";
     private static AnimationTimer gameLoop;
     private static ShootingPowerUp shootingPowerUp = null;
+    private static boolean reverseControls = false;
+    private static boolean gravityReversed = false;
+    private static boolean portalsActive = false;
+    private static int portal1X, portal1Y, portal2X, portal2Y;
 
     private static ArrayList<Ball> extraBalls = new ArrayList<>();
 
@@ -108,17 +114,46 @@ public class GameEngine {
         GameEngine.gameState = gameState;
     }
 
+    public static boolean isArcadeMode() {
+        return arcadeMode;
+    }
+
+    public static void setArcadeMode(boolean arcadeMode) {
+        GameEngine.arcadeMode = arcadeMode;
+    }
+
     public static ArrayList<Ball> getExtraBalls() {
         return extraBalls;
     }
 
-    public static ShootingPowerUp getShootingPowerUp() {
-        return shootingPowerUp;
+    public static boolean isReverseControls() {
+        return reverseControls;
     }
 
-    public static void setShootingPowerUp(ShootingPowerUp powerUp) {
-        GameEngine.shootingPowerUp = powerUp;
+    public static void setReverseControls(boolean reverse) {
+        GameEngine.reverseControls = reverse;
     }
+
+    public static boolean isGravityReversed() {
+        return gravityReversed;
+    }
+
+    public static void setGravityReversed(boolean reversed) {
+        GameEngine.gravityReversed = reversed;
+    }
+
+    public static boolean isPortalsActive() { return portalsActive; }
+    public static void setPortals(int x1, int y1, int x2, int y2) {
+        portal1X = x1; portal1Y = y1;
+        portal2X = x2; portal2Y = y2;
+        portalsActive = true;
+    }
+    public static void disablePortals() { portalsActive = false; }
+
+    public static int getPortal1X() { return portal1X; }
+    public static int getPortal1Y() { return portal1Y; }
+    public static int getPortal2X() { return portal2X; }
+    public static int getPortal2Y() { return portal2Y; }
 
     public static void addExtraBalls(ArrayList<Ball> balls) {
         extraBalls.addAll(balls);
@@ -147,7 +182,7 @@ public class GameEngine {
 
         GameEngine.paddle.render();
         GameEngine.ball.render();
-
+        GameEngine.disablePortals();
 
         HeartPowerUp.resetHeartCounter();
 
@@ -162,10 +197,9 @@ public class GameEngine {
         bricks.forEach(b -> b.render());
         powerUps.forEach(p -> p.render());
 
-        shootingPowerUp = null;
         setLives(GameConst.DefaultLives);
         setScore(0);
-       // setGameState(1);
+        // setGameState(1);
     }
 
     public static void updateGame() throws IOException, URISyntaxException, InterruptedException  {
@@ -187,6 +221,10 @@ public class GameEngine {
             if (!shootingPowerUp.isEffectActive()) {
                 shootingPowerUp = null;
             }
+        }
+
+        if (portalsActive) {
+            Renderer.getInstance().renderPortals();
         }
 
         for (Ball extraBall : extraBalls) {
@@ -214,7 +252,9 @@ public class GameEngine {
             if (!b.isDestroyed()) b.render();
             else {
                 bricktoRemove.add(b);
-                setScore(getScore() + b.getHitPoints());
+                if (isArcadeMode()) {
+                    setScore(getScore() + b.getHitPoints());
+                }
                 level.setNumOfBricksToLvlUp(getLevel().getNumOfBricksToLvlUp() - 1);
             }
         });
@@ -241,7 +281,19 @@ public class GameEngine {
         gameCanvas.setOnMouseMoved(MouseEvent -> {
             if (MouseEvent.getX() - paddle.getWidth() / 2 >= 0
                     && MouseEvent.getX() + paddle.getWidth() / 2 < gameCanvas.getWidth() && gameState == 0) {
-                if (paddle.isPaddleSliding()) paddle.setX((int) MouseEvent.getX() - GameConst.PaddleWidth / 2);
+                if (paddle.isPaddleSliding()) {
+                    int targetX = (int) MouseEvent.getX() - GameConst.PaddleWidth / 2;
+
+                    // ĐẢO NGƯỢC ĐIỀU KHIỂN :)))
+                    if (reverseControls) {
+                        // Di chuyển chuột sang TRÁI → paddle sang PHẢI và ngược lại
+                        int screenCenter = GameConst.WIDTH / 2;
+                        int distanceFromCenter = (int) MouseEvent.getX() - screenCenter;
+                        targetX = screenCenter - distanceFromCenter - GameConst.PaddleWidth / 2;
+                    }
+
+                    paddle.setX(targetX);
+                }
             }
         });
     }
@@ -258,9 +310,6 @@ public class GameEngine {
         }
 
         powerUps.forEach(powerUp -> powerUp.checkPaddleCollision(GameEngine.paddle));
-        if (shootingPowerUp != null && shootingPowerUp.isEffectActive()) {
-            shootingPowerUp.renderBullets();
-        }
     }
 
     public static void levelUp() throws IOException, URISyntaxException {
@@ -290,6 +339,7 @@ public class GameEngine {
             paddle.render();
             ball.render();
             shootingPowerUp = null;
+            GameEngine.disablePortals();
 
             System.out.println("LEVEL UP! Now level: " + level.getLvl());
         }
@@ -333,6 +383,7 @@ public class GameEngine {
 
             extraBalls.clear();
             shootingPowerUp = null;
+            GameEngine.disablePortals();
 
             Renderer.getInstance().renderBackground();
             bricks.forEach(b -> {
@@ -346,11 +397,16 @@ public class GameEngine {
         }
 
         if (getLives() == 0) {
+            if (isArcadeMode()) {
+                saveNewHighScore(getScore());
+            }
+            Sound.playSFX("game_over.wav");
             setScore(0);
             paddle.setWidth(GameConst.PaddleWidth);
             ball.setSpeed(GameConst.DefaultSpeed);
             extraBalls.clear();
             shootingPowerUp = null;
+            GameEngine.disablePortals();
             level.setNumOfBricksToLvlUp(0);
             return true;
         }
@@ -363,7 +419,7 @@ public class GameEngine {
             writer.println("level=" + level.getLvl());
             writer.println("score=" + score);
             writer.println("lives=" + lives);
-
+            writer.println("isArcadeMode=" + arcadeMode);
             writer.println("paddle=" + paddle.getX() + "," + paddle.getY() + "," + paddle.isPaddleSliding());
             writer.println("ball=" + ball.getX() + "," + ball.getY() + "," + ball.isBallMoving());
 
@@ -395,6 +451,7 @@ public class GameEngine {
             powerUps.clear();
             extraBalls.clear();
             GameEngine.getLevel().setNumOfBricksToLvlUp(0);
+            GameEngine.disablePortals();
 
             String line;
             while ((line = reader.readLine()) != null) {
@@ -407,6 +464,7 @@ public class GameEngine {
                     case "level" -> level.setLvl(Integer.parseInt(value));
                     case "score" -> score = Integer.parseInt(value);
                     case "lives" -> lives = Integer.parseInt(value);
+                    case "isArcadeMode" -> arcadeMode = Boolean.parseBoolean(value);
 
                     case "paddle" -> {
                         String[] vals = value.split(",");
@@ -497,6 +555,38 @@ public class GameEngine {
 
         } catch (IOException e) {
             System.out.println(e.getMessage());
+        }
+    }
+
+    public static int getHighScore() {
+        int highScore = 0;
+        try (BufferedReader reader = new BufferedReader(new FileReader(highScoreFile))) {
+            String line = reader.readLine();
+            if (line != null) {
+                highScore = Integer.parseInt(line.trim());
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Not found. High score = 0");
+        } catch (IOException | NumberFormatException e) {
+            e.printStackTrace();
+        }
+        return highScore;
+    }
+
+    public static void saveNewHighScore(int currentScore) {
+        if (!isArcadeMode()) {
+            return;
+        }
+
+        int oldHighScore = getHighScore();
+
+        if (currentScore > oldHighScore) {
+            try (PrintWriter writer = new PrintWriter(new FileWriter(highScoreFile))) {
+                writer.println(currentScore);
+                System.out.println("New High Score: " + currentScore);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
