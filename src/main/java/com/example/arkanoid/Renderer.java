@@ -206,6 +206,9 @@ public class Renderer {
 
         drawGoldenPortalEffect(gc);
         gc.restore();
+        gc.setFill(Color.WHITE);
+        gc.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        gc.fillText("🪞 GOLDEN MIRROR PORTAL", 250, 30);
     }
 
     private void drawGoldenPortalEffect(GraphicsContext gc) {
