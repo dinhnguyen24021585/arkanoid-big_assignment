@@ -24,7 +24,6 @@ public class GameEngine {
     private static AnimationTimer gameLoop;
     private static ShootingPowerUp shootingPowerUp = null;
     private static boolean reverseControls = false;
-    private static boolean gravityReversed = false;
     private static boolean portalsActive = false;
     private static int portal1X, portal1Y, portal2X, portal2Y;
 
@@ -134,14 +133,6 @@ public class GameEngine {
         GameEngine.reverseControls = reverse;
     }
 
-    public static boolean isGravityReversed() {
-        return gravityReversed;
-    }
-
-    public static void setGravityReversed(boolean reversed) {
-        GameEngine.gravityReversed = reversed;
-    }
-
     public static boolean isPortalsActive() { return portalsActive; }
     public static void setPortals(int x1, int y1, int x2, int y2) {
         portal1X = x1; portal1Y = y1;
@@ -191,6 +182,7 @@ public class GameEngine {
         GameEngine.paddle.render();
         GameEngine.ball.render();
         GameEngine.disablePortals();
+        setReverseControls(false);
 
         HeartPowerUp.resetHeartCounter();
 
@@ -248,8 +240,9 @@ public class GameEngine {
             powerUp.update();
             powerUp.render();
 
-            if (powerUp.isEffectExpired() || (powerUp instanceof HeartPowerUp
-                    && powerUp.checkPaddleCollision(paddle))) {
+            if (powerUp.isEffectExpired() ||
+                    (powerUp instanceof HeartPowerUp && powerUp.checkPaddleCollision(paddle)) ||
+                    (powerUp.isEffectActive() && powerUp.isEffectExpired())) {
                 powerUpsToRemove.add(powerUp);
             }
         });
@@ -396,6 +389,7 @@ public class GameEngine {
             extraBalls.clear();
             shootingPowerUp = null;
             GameEngine.disablePortals();
+            setReverseControls(false);
 
             Renderer.getInstance().renderBackground();
             bricks.forEach(b -> {
@@ -419,6 +413,7 @@ public class GameEngine {
             extraBalls.clear();
             shootingPowerUp = null;
             GameEngine.disablePortals();
+            setReverseControls(false);
             level.setNumOfBricksToLvlUp(0);
             return true;
         }

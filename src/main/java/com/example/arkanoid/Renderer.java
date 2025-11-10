@@ -14,6 +14,8 @@ public class Renderer {
     private GraphicsContext gc;
     private Image Bg = null;
     private int currentLevel = -1;
+    private Image portalImage = null;
+    private double portalRotation = 0;
     private final static Color COLOR_FAR = Color.rgb(150, 200, 255);
     private final static Color COLOR_NEAR = Color.rgb(240, 255, 255);
 
@@ -167,58 +169,59 @@ public class Renderer {
     public void renderPortals() {
         if (gc == null || !GameEngine.isPortalsActive()) return;
 
+        if (portalImage == null) {
+            try {
+                portalImage = new Image(getClass().getResourceAsStream(
+                        "/com/example/arkanoid/Image/portal.png"));
+            } catch (Exception e) {
+                drawGoldenPortal();
+                return;
+            }
+        }
+
+        int portalX = GameEngine.getPortal1X();
+        int portalY = GameEngine.getPortal1Y();
+
+        gc.save();
+
+        portalRotation = (portalRotation + 3) % 360;
+
+        gc.translate(portalX + 40, portalY + 40);
+        gc.rotate(portalRotation);
+
+        gc.drawImage(portalImage, -40, -40, 80, 80);
+        gc.restore();
+    }
+
+    private void drawGoldenPortal() {
         int portalX = GameEngine.getPortal1X();
         int portalY = GameEngine.getPortal1Y();
         gc.save();
 
         long currentTime = System.currentTimeMillis();
         double baseRotation = (currentTime * 0.08) % 360;
-        double tilt = 15;
 
-        gc.translate(portalX + 30, portalY + 30);
-        gc.rotate(baseRotation + tilt);
+        gc.translate(portalX + 40, portalY + 40);
+        gc.rotate(baseRotation);
 
-        drawGoldenPortal(gc);
-
+        drawGoldenPortalEffect(gc);
         gc.restore();
         gc.setFill(Color.WHITE);
         gc.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         gc.fillText("🪞 GOLDEN MIRROR PORTAL", 250, 30);
     }
 
-    private void drawGoldenPortal(GraphicsContext gc) {
+    private void drawGoldenPortalEffect(GraphicsContext gc) {
         int size = 80;
         long currentTime = System.currentTimeMillis();
 
-        double glow = Math.sin(currentTime * 0.01) * 0.3 + 0.7;
+        double glow = (Math.sin(currentTime * 0.01) + 1) * 0.15 + 0.7;
         gc.setFill(Color.rgb(100, 255, 255, glow));
         gc.fillOval(-size/2, -size/2, size, size);
 
         gc.setStroke(Color.rgb(0, 150, 200));
-        gc.setLineWidth(3);
+        gc.setLineWidth(2);
         gc.strokeOval(-size/2, -size/2, size, size);
-
-        double rotation = (currentTime * 0.08) % 360;
-
-        for (int i = 0; i < 3; i++) {
-            double angle = Math.toRadians(rotation + i * 120);
-            double startX = Math.cos(angle) * 15;
-            double startY = Math.sin(angle) * 15;
-            double endX = Math.cos(angle) * 25;
-            double endY = Math.sin(angle) * 25;
-
-            double alpha = 0.5 + 0.3 * Math.sin(currentTime * 0.02 + i);
-            gc.setStroke(Color.rgb(200, 255, 255, alpha));
-            gc.setLineWidth(2);
-            gc.strokeLine(startX, startY, endX, endY);
-        }
-
-        double sparkle = Math.sin(currentTime * 0.015) * 0.4 + 0.6;
-        gc.setFill(Color.rgb(220, 255, 255, sparkle));
-        gc.fillOval(-6, -6, 12, 12);
-
-        gc.setFill(Color.rgb(150, 255, 255, 0.25));
-        gc.fillOval(-size/2 - 5, -size/2 - 5, size + 10, size + 10);
     }
 
     public void renderBackground() {
@@ -231,12 +234,5 @@ public class Renderer {
         }
 
         gc.drawImage(Bg, 0, 0, GameConst.WIDTH, GameConst.HEIGHT);
-    }
-
-    public void renderAll(GameObject[] objects) {
-        if (gc == null) return;
-        for (GameObject obj : objects) {
-            render(obj);
-        }
     }
 }

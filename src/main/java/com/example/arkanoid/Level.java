@@ -82,7 +82,7 @@ public class Level {
             }
         }
 
-        int numOfPowers = (int) Math.floor(Math.random() * 30) + 10;
+        int numOfPowers = (int) Math.floor(Math.random() * 10) + 10;
         for (int i = 0; i < numOfPowers; i++) {
             int typeOfPower = (int) Math.floor(Math.random() * 7) + 1;
 
