@@ -21,7 +21,7 @@ public class GameConst {
     public static final int PowerWidth = 30;
     public static final int PowerHeight = 30;
 
-    public static final int DefaultSpeed = 2;
+    public static final int DefaultSpeed = 4;
     public static final int DefaultLives = 3;
 
     public static final int FontSize = 24;

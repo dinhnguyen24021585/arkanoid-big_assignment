@@ -413,7 +413,7 @@ public class GameEngine {
                 saveNewHighScore(getScore());
             }
             Sound.playSFX("game_over.wav");
-            setScore(0);
+            //setScore(0);
             paddle.setWidth(GameConst.PaddleWidth);
             ball.setSpeed(GameConst.DefaultSpeed);
             extraBalls.clear();

@@ -183,7 +183,7 @@ public class Renderer {
         gc.restore();
         gc.setFill(Color.WHITE);
         gc.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-        gc.fillText("🪞 GOLDEN MIRROR PORTAL", 320, 30);
+        gc.fillText("🪞 GOLDEN MIRROR PORTAL", 250, 30);
     }
 
     private void drawGoldenPortal(GraphicsContext gc) {
@@ -191,10 +191,10 @@ public class Renderer {
         long currentTime = System.currentTimeMillis();
 
         double glow = Math.sin(currentTime * 0.01) * 0.3 + 0.7;
-        gc.setFill(Color.rgb(255, 215, 0, glow));
+        gc.setFill(Color.rgb(100, 255, 255, glow));
         gc.fillOval(-size/2, -size/2, size, size);
 
-        gc.setStroke(Color.rgb(80, 60, 0)); // Nâu đậm ánh vàng
+        gc.setStroke(Color.rgb(0, 150, 200));
         gc.setLineWidth(3);
         gc.strokeOval(-size/2, -size/2, size, size);
 
@@ -208,16 +208,16 @@ public class Renderer {
             double endY = Math.sin(angle) * 25;
 
             double alpha = 0.5 + 0.3 * Math.sin(currentTime * 0.02 + i);
-            gc.setStroke(Color.rgb(255, 255, 150, alpha));
+            gc.setStroke(Color.rgb(200, 255, 255, alpha));
             gc.setLineWidth(2);
             gc.strokeLine(startX, startY, endX, endY);
         }
 
         double sparkle = Math.sin(currentTime * 0.015) * 0.4 + 0.6;
-        gc.setFill(Color.rgb(255, 255, 200, sparkle));
+        gc.setFill(Color.rgb(220, 255, 255, sparkle));
         gc.fillOval(-6, -6, 12, 12);
 
-        gc.setFill(Color.rgb(255, 255, 100, 0.2));
+        gc.setFill(Color.rgb(150, 255, 255, 0.25));
         gc.fillOval(-size/2 - 5, -size/2 - 5, size + 10, size + 10);
     }
 

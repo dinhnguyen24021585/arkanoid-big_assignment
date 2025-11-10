@@ -13,7 +13,7 @@ public class ShootingPowerUp extends PowerUp {
 
     public ShootingPowerUp(int x, int y) {
         super(x, y, GameConst.PowerWidth, GameConst.PowerHeight, 5);
-        this.image = new Image(getClass().getResourceAsStream("/com/example/arkanoid/Image/powerup_shooting.jpg"));
+        this.image = new Image(getClass().getResourceAsStream("/com/example/arkanoid/Image/powerup_shooting.png"));
         this.bullets = new ArrayList<>();
         this.duration = BASE_DURATION;
         this.totalDuration = BASE_DURATION;
