@@ -15,6 +15,7 @@ public class Ball extends MovableObject {
     private Image image;
     private final int MAX_TRAIL_LENGTH = 10;
     private LinkedList<Point2D> trailPoints;
+    private long lastTeleportTime = 0;
 
     public Ball(int x, int y, int width, int height, int speed, int directionX, int directionY) {
         super();
@@ -130,56 +131,32 @@ public class Ball extends MovableObject {
         int ballCenterX = getX() + getWidth()/2;
         int ballCenterY = getY() + getHeight()/2;
 
-        int portalX = GameEngine.getPortal1X() + 40;
-        int portalY = GameEngine.getPortal1Y() + 40;
+        int portalCenterX = GameEngine.getPortal1X() + 40;
+        int portalCenterY = GameEngine.getPortal1Y() + 40;
 
-        if (Math.abs(ballCenterX - portalX) < 50 &&
-                Math.abs(ballCenterY - portalY) < 50) {
+        double distance = Math.sqrt(
+                Math.pow(ballCenterX - portalCenterX, 2) +
+                        Math.pow(ballCenterY - portalCenterY, 2)
+        );
 
+        if (distance < 35 && System.currentTimeMillis() - lastTeleportTime > 1000) {
             teleportToRandomConfusingPosition();
-
-            System.out.println("CONFUSION TELEPORT!");
+            lastTeleportTime = System.currentTimeMillis();
+            System.out.println("PORTAL TELEPORT!");
         }
     }
 
     private void teleportToRandomConfusingPosition() {
-        int newX, newY;
-        int attempt = 0;
+        int[][] safePositions = {
+                {10, 10},
+                {GameConst.WIDTH - getWidth() - 10, 10},
+                {10, GameConst.HEIGHT - 150},
+                {GameConst.WIDTH - getWidth() - 10, GameConst.HEIGHT - 150}
+        };
 
-        do {
-            int zone = (int)(Math.random() * 6);
-            switch (zone) {
-                case 0 -> {
-                    newX = 10;
-                    newY = 10;
-                }
-                case 1 -> {
-                    newX = GameConst.WIDTH - getWidth() - 10;
-                    newY = 10;
-                }
-                case 2 -> {
-                    newX = 10;
-                    newY = GameConst.HEIGHT - 200;
-                }
-                case 3 -> {
-                    newX = GameConst.WIDTH - getWidth() - 10;
-                    newY = GameConst.HEIGHT - 200;
-                }
-                case 4 -> {
-                    newX = GameConst.WIDTH / 2 - getWidth()/2;
-                    newY = 5;
-                }
-                case 5 -> {
-                    newX = Math.max( (int)(Math.random() * (GameConst.WIDTH - getWidth())), 0);
-                    newY = GameConst.HEIGHT - 150;
-                }
-                default -> {
-                    newX = getX();
-                    newY = getY();
-                }
-            }
-            attempt++;
-        } while (!isSafePosition(newX + getWidth()/2, newY + getHeight()/2) && attempt < 10);
+        int randomIndex = (int)(Math.random() * safePositions.length);
+        int newX = safePositions[randomIndex][0];
+        int newY = safePositions[randomIndex][1];
 
         setX(newX);
         setY(newY);
@@ -188,42 +165,6 @@ public class Ball extends MovableObject {
         if (Math.random() < 0.5) reverseY();
 
         System.out.println("Ball teleported to: " + newX + ", " + newY);
-    }
-
-    private boolean isSafePosition(int x, int y) {
-        for (Brick brick : GameEngine.getBricks()) {
-            if (!brick.isDestroyed() && brick instanceof UnbreakableBrick) {
-                if (x >= brick.getX() && x <= brick.getX() + brick.getWidth() &&
-                        y >= brick.getY() && y <= brick.getY() + brick.getHeight()) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    private void findSafeMirrorPosition(int targetX, int targetY) {
-        int safeX = targetX;
-        int safeY = targetY;
-
-        int[] offsets = {0, 50, -50, 100, -100, 150, -150};
-
-        for (int offsetX : offsets) {
-            for (int offsetY : offsets) {
-                int testX = targetX + offsetX;
-                int testY = targetY + offsetY;
-
-                if (testX >= 0 && testX <= GameConst.WIDTH &&
-                        testY >= 0 && testY <= GameConst.HEIGHT) {
-
-                    if (isSafePosition(testX, testY)) {
-                        setX(testX - getWidth()/2);
-                        setY(testY - getHeight()/2);
-                        return;
-                    }
-                }
-            }
-        }
     }
 
     @Override
