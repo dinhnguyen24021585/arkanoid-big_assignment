@@ -1,8 +1,15 @@
 package com.example.arkanoid;
 
+import com.example.arkanoid.Bricks.ExplosiveBrick;
+import com.example.arkanoid.Bricks.NormalBrick;
+import com.example.arkanoid.Bricks.StrongBrick;
+import com.example.arkanoid.Bricks.UnbreakableBrick;
+import com.example.arkanoid.GameElements.*;
+
+
+import com.example.arkanoid.PowerUps.*;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.input.MouseEvent;
 
 import java.io.*;
 import java.net.URISyntaxException;
@@ -20,7 +27,7 @@ public class GameEngine {
     private static int lives;
     private static int gameState;
     private static boolean arcadeMode = true;
-    private static final String highScoreFile = "high_score.txt";
+    private static final String highScoreFile = "saveAndLoad/high_score.txt";
     private static AnimationTimer gameLoop;
     private static ShootingPowerUp shootingPowerUp = null;
     private static boolean reverseControls = false;
@@ -422,7 +429,7 @@ public class GameEngine {
     }
 
     public static void saveStateToFile() {
-        try (PrintWriter writer = new PrintWriter(new FileWriter("save_state.txt"))) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter("saveAndLoad/save_state.txt"))) {
             writer.println("level=" + level.getLvl());
             writer.println("score=" + score);
             writer.println("lives=" + lives);
@@ -453,7 +460,7 @@ public class GameEngine {
     }
 
     public static void loadStateFromFile() {
-        try (BufferedReader reader = new BufferedReader(new FileReader("save_state.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("saveAndLoad/save_state.txt"))) {
             bricks.clear();
             powerUps.clear();
             extraBalls.clear();

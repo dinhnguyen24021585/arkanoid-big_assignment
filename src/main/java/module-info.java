@@ -10,6 +10,6 @@ module com.example.arkanoid {
 //    requires com.dlsc.formsfx;
 //    requires javafx.web;
 
-    opens com.example.arkanoid to javafx.fxml;
+    opens com.example.arkanoid.Controllers to javafx.fxml;
     exports com.example.arkanoid;
 }
