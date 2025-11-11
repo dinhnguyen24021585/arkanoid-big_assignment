@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Level {
     private int lvl;
-    private int[][] isBricksShown = new int[4][10];
+    private int[][] isBricksShown = new int[8][10];
     private int numOfBricksToLvlUp;
     private static boolean[] chooseLevel = new boolean[10];
 
@@ -73,7 +73,7 @@ public class Level {
             }
         }
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 10; j++) {
                 if (isBricksShown[i][j] == 1) {
                     Brick brick = new NormalBrick(GameConst.BrickWidth * j, 50 + GameConst.BrickHeight * i);
@@ -101,7 +101,7 @@ public class Level {
         for (int i = 0; i < numOfPowers; i++) {
             int typeOfPower = (int) Math.floor(Math.random() * 7) + 1;
 
-            int location = (int) Math.floor(Math.random() * 40);
+            int location = (int) Math.floor(Math.random() * 80);
             if (isBricksShown[location / 10][location % 10] != 0
                     && isBricksShown[location / 10][location % 10] != Integer.MAX_VALUE) {
                 int x = (GameConst.BrickWidth - GameConst.PowerWidth) / 2
