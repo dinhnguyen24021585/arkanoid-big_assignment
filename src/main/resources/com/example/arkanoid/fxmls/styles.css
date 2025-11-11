@@ -70,6 +70,12 @@
     -fx-background-position: center;
 }
 
+.win-background {
+    -fx-background-image: url("../Image/win.png");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+}
+
 .chooseLvl-background {
     -fx-background-image: url("../Image/chooseLvl.png");
     -fx-background-size: cover;
