@@ -34,7 +34,7 @@ public class ChooseLevelController {
             //ImageView imageView = new ImageView(getClass().getResource("/com/example/arkanoid/" + i + ".png").toExternalForm());
             Button btn = new Button(String.valueOf(i));
             buttons.add(btn);
-            String path = "/com/example/arkanoid/Image/chooseLvlButtons" + i + ".png";
+            String path = "/com/example/arkanoid/Image/chooseLvlButtons/" + i + ".png";
 
             btn.setPrefWidth(400);
             btn.setPrefHeight(400);
