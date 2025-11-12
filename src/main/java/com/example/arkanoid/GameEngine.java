@@ -535,10 +535,6 @@ public class GameEngine {
                             default -> null;
                         };
 
-                        if (!(b instanceof UnbreakableBrick)) {
-                            GameEngine.getLevel().setNumOfBricksToLvlUp(getLevel().getNumOfBricksToLvlUp() + 1);
-                        }
-
                         if (b != null) {
                             b.setDestroyed(destroyed);
                             bricks.add(b);
