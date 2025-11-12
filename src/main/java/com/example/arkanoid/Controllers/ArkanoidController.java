@@ -76,7 +76,7 @@ public class ArkanoidController {
                     gc.fillText(String.format("Score: %d", GameEngine.getScore()), 350,
                             GameConst.HEIGHT - GameConst.FontSize);
                     gc.fillText(String.format("High Score: %d", GameEngine.getHighScore()),
-                            600, GameConst.FontSize);
+                            560, GameConst.FontSize);
                 }
 
                 if (GameEngine.getLevel().getLvl() > GameEngine.MAX_LEVEL) {
