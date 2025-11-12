@@ -21,21 +21,39 @@ public class FastBallPowerUp extends PowerUp {
         Ball ball = GameEngine.getBall();
         this.currSpeed = ball.getSpeed();
 
+        // MAIN BALL
         ball.setSpeed(currSpeed * 2);
         ball.setDx(ball.getDirectionX() * ball.getSpeed());
         ball.setDy(ball.getDirectionY() * ball.getSpeed());
 
+        // THÊM EXTRA BALLS
+        for (Ball extraBall : GameEngine.getExtraBalls()) {
+            extraBall.setSpeed(currSpeed * 2);
+            extraBall.setDx(extraBall.getDirectionX() * extraBall.getSpeed());
+            extraBall.setDy(extraBall.getDirectionY() * extraBall.getSpeed());
+        }
+
         startEffectTimer();
+        effectActive = true;
     }
 
     @Override
     public void removeEffect() {
-        if (GameEngine.getBall() == null || !isEffectActive()) return;
+        if (!isEffectActive()) return;
 
         Ball ball = GameEngine.getBall();
-        ball.setSpeed(GameConst.DefaultSpeed);
-        ball.setDx(ball.getDirectionX() * GameConst.DefaultSpeed);
-        ball.setDy(ball.getDirectionY() * GameConst.DefaultSpeed);
+        if (ball != null) {
+            ball.setSpeed(GameConst.DefaultSpeed);
+            ball.setDx(ball.getDirectionX() * GameConst.DefaultSpeed);
+            ball.setDy(ball.getDirectionY() * GameConst.DefaultSpeed);
+        }
+
+        for (Ball extraBall : GameEngine.getExtraBalls()) {
+            extraBall.setSpeed(GameConst.DefaultSpeed);
+            extraBall.setDx(extraBall.getDirectionX() * GameConst.DefaultSpeed);
+            extraBall.setDy(extraBall.getDirectionY() * GameConst.DefaultSpeed);
+        }
+        effectActive = false;
     }
 
     public Image getImage() {

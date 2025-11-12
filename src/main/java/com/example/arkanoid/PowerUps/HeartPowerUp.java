@@ -20,7 +20,6 @@ public class HeartPowerUp extends PowerUp {
 
             GameEngine.setLives(GameEngine.getLives() + 1);
 
-            //effectApplied = true;
             effectActive = true;
         }
     }

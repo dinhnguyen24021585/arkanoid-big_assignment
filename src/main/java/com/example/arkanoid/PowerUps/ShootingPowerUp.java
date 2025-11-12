@@ -8,6 +8,7 @@ import com.example.arkanoid.GameElements.Paddle;
 import com.example.arkanoid.GameElements.Sound;
 import com.example.arkanoid.GameEngine;
 import javafx.scene.image.Image;
+
 import java.util.ArrayList;
 
 public class ShootingPowerUp extends PowerUp {
