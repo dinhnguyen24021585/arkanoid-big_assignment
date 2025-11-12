@@ -128,7 +128,7 @@ public class ShootingPowerUp extends PowerUp {
                         bricksToRemove.add(brick);
                         bulletsToRemove.add(bullet);
 
-                        GameEngine.setScore(GameEngine.getScore() + brick.getHitPoints());
+                        GameEngine.setScore(GameEngine.getScore() + brick.getHitPoints() * 10);
                         GameEngine.getLevel().setNumOfBricksToLvlUp(
                                 GameEngine.getLevel().getNumOfBricksToLvlUp() - 1
                         );

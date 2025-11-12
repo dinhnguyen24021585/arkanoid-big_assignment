@@ -525,8 +525,6 @@ public class GameEngine {
                             default -> null;
                         };
 
-                        GameEngine.getLevel().setNumOfBricksToLvlUp(getLevel().getNumOfBricksToLvlUp() + 1);
-
                         if (b != null) {
                             b.setDestroyed(destroyed);
                             bricks.add(b);
