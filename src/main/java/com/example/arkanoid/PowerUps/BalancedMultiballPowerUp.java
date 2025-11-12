@@ -32,8 +32,8 @@ public class BalancedMultiballPowerUp extends PowerUp {
 
     private ArrayList<Ball> getAllBalls() {
         ArrayList<Ball> allBalls = new ArrayList<>();
-        allBalls.add(GameEngine.getBall());
-        allBalls.addAll(GameEngine.getExtraBalls());
+        allBalls.add(GameEngine.getInstance().getBall());
+        allBalls.addAll(GameEngine.getInstance().getExtraBalls());
         return allBalls;
     }
 
@@ -52,7 +52,7 @@ public class BalancedMultiballPowerUp extends PowerUp {
                     -1
             );
             newBall.setBallMoving(true);
-            GameEngine.getExtraBalls().add(newBall);
+            GameEngine.getInstance().getExtraBalls().add(newBall);
         }
     }
 

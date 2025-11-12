@@ -7,7 +7,7 @@ import com.example.arkanoid.GameEngine;
 public class NormalBrick extends Brick {
     public NormalBrick(int x, int y) {
         super(x, y, GameConst.BrickWidth, GameConst.BrickHeight, 1, 1);
-        GameEngine.getLevel().setNumOfBricksToLvlUp(GameEngine.getLevel().getNumOfBricksToLvlUp() + 1);
+        GameEngine.getInstance().getLevel().setNumOfBricksToLvlUp(GameEngine.getInstance().getLevel().getNumOfBricksToLvlUp() + 1);
     }
 
     @Override

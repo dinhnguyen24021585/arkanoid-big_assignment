@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class GameEngine {
     //for Singleton
     private static GameEngine instance;
-    private static Object lock = new Object();
+    private static final Object lock = new Object();
 
     private static Paddle paddle = new Paddle(GameConst.DefaultPaddle_X, GameConst.DefaultPaddle_Y, GameConst.PaddleWidth, GameConst.PaddleHeight);
     private static Ball ball = new Ball(GameConst.DefaultBall_X, GameConst.DefaultBall_Y, GameConst.BallRadius, GameConst.BallRadius, GameConst.DefaultSpeed, GameConst.DefaultDir_X, GameConst.DefaultDir_Y);
@@ -36,16 +36,26 @@ public class GameEngine {
     }
 
     public GameEngine(Paddle paddle, Ball ball) {
-        GameEngine.paddle = paddle;
-        GameEngine.ball = ball;
+        GameEngine.getInstance().paddle = paddle;
+        GameEngine.getInstance().ball = ball;
+    }
+
+    public static GameEngine getInstance() {
+        if (instance == null) {
+            synchronized (lock) {
+                if (instance == null) instance = new GameEngine();
+            }
+        }
+
+        return instance;
     }
 
     public GameEngine(Paddle paddle, Ball ball, ArrayList<Brick> bricks, ArrayList<PowerUp> powerUps, int score, int lives, int gameState, Level level) {
-        GameEngine.paddle = paddle;
-        GameEngine.ball = ball;
-        GameEngine.bricks = bricks;
-        GameEngine.powerUps = powerUps;
-        GameEngine.level = level;
+        GameEngine.getInstance().paddle = paddle;
+        GameEngine.getInstance().ball = ball;
+        GameEngine.getInstance().bricks = bricks;
+        GameEngine.getInstance().powerUps = powerUps;
+        GameEngine.getInstance().level = level;
         this.score = score;
         this.lives = lives;
         this.gameState = gameState;
@@ -60,15 +70,15 @@ public class GameEngine {
     }
 
     public static void setBall(Ball ball) {
-        GameEngine.ball = ball;
+        GameEngine.getInstance().ball = ball;
     }
 
     public static ArrayList<Brick> getBricks() {
-        return GameEngine.bricks;
+        return GameEngine.getInstance().bricks;
     }
 
     public static void setBricks(ArrayList<Brick> bricks) {
-        GameEngine.bricks = bricks;
+        GameEngine.getInstance().bricks = bricks;
     }
 
     public static ArrayList<PowerUp> getPowerUps() {
@@ -76,7 +86,7 @@ public class GameEngine {
     }
 
     public static void setPowerUps(ArrayList<PowerUp> powerUps) {
-        GameEngine.powerUps = powerUps;
+        GameEngine.getInstance().powerUps = powerUps;
     }
 
     public static Level getLevel() {
@@ -84,7 +94,7 @@ public class GameEngine {
     }
 
     public static void setLevel(Level level) {
-        GameEngine.level = level;
+        GameEngine.getInstance().level = level;
     }
 
     public static int getScore() {
@@ -92,7 +102,7 @@ public class GameEngine {
     }
 
     public static void setScore(int score) {
-        GameEngine.score = score;
+        GameEngine.getInstance().score = score;
     }
 
     public static int getLives() {
@@ -270,9 +280,7 @@ public class GameEngine {
 
                 if (diffX == 25 && brick.getY() == powerUp.getY()) {
                     powerUp.setActive(true);
-                } else {
-                    System.out.println(" Condition not met - Expected diffX=25, got: " + diffX);
-                }
+                } 
             });
         });
 

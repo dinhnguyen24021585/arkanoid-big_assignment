@@ -7,7 +7,7 @@ import com.example.arkanoid.GameEngine;
 public class StrongBrick extends Brick {
     public StrongBrick(int x, int y, int hits, int type) {
         super(x, y, GameConst.BrickWidth, GameConst.BrickHeight, hits, type);
-        GameEngine.getLevel().setNumOfBricksToLvlUp(GameEngine.getLevel().getNumOfBricksToLvlUp() + 1);
+        GameEngine.getInstance().getLevel().setNumOfBricksToLvlUp(GameEngine.getInstance().getLevel().getNumOfBricksToLvlUp() + 1);
     }
 
     @Override

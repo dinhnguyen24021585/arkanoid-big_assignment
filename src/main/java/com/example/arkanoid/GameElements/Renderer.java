@@ -180,7 +180,7 @@ public class Renderer {
     }
 
     public void renderPortals() {
-        if (gc == null || !GameEngine.isPortalsActive()) return;
+        if (gc == null || !GameEngine.getInstance().isPortalsActive()) return;
 
         if (portalImage == null) {
             try {
@@ -192,8 +192,8 @@ public class Renderer {
             }
         }
 
-        int portalX = GameEngine.getPortal1X();
-        int portalY = GameEngine.getPortal1Y();
+        int portalX = GameEngine.getInstance().getPortal1X();
+        int portalY = GameEngine.getInstance().getPortal1Y();
 
         gc.save();
 
@@ -207,8 +207,8 @@ public class Renderer {
     }
 
     private void drawGoldenPortal() {
-        int portalX = GameEngine.getPortal1X();
-        int portalY = GameEngine.getPortal1Y();
+        int portalX = GameEngine.getInstance().getPortal1X();
+        int portalY = GameEngine.getInstance().getPortal1Y();
         gc.save();
 
         long currentTime = System.currentTimeMillis();
@@ -238,9 +238,9 @@ public class Renderer {
     }
 
     public void renderBackground() {
-        if (gc == null || GameEngine.getLevel() == null) return;
+        if (gc == null || GameEngine.getInstance().getLevel() == null) return;
 
-        if (Bg == null || !Objects.equals(currentLevel, GameEngine.getLevel().getLvl())) {
+        if (Bg == null || !Objects.equals(currentLevel, GameEngine.getInstance().getLevel().getLvl())) {
             Bg = new Image(getClass().getResourceAsStream(
                     "/com/example/arkanoid/Image/bgForLvl/background" + GameEngine.getLevel().getLvl() + ".png"));
             currentLevel = GameEngine.getLevel().getLvl();

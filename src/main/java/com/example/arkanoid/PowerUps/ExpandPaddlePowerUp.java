@@ -37,7 +37,7 @@ public class ExpandPaddlePowerUp extends PowerUp {
     }
 
     private void applyPaddleExpand() {
-        Paddle paddle = GameEngine.getPaddle();
+        Paddle paddle = GameEngine.getInstance().getPaddle();
         if (paddle == null) return;
 
         int currentWidth = paddle.getWidth();
@@ -71,7 +71,7 @@ public class ExpandPaddlePowerUp extends PowerUp {
     }
 
     private int getCurrentMouseX() {
-        Paddle paddle = GameEngine.getPaddle();
+        Paddle paddle = GameEngine.getInstance().getPaddle();
         if (paddle != null) {
             return paddle.getX() + (paddle.getWidth() / 2);
         }
@@ -79,7 +79,7 @@ public class ExpandPaddlePowerUp extends PowerUp {
     }
 
     private void restorePaddleSize() {
-        Paddle paddle = GameEngine.getPaddle();
+        Paddle paddle = GameEngine.getInstance().getPaddle();
         if (paddle != null) {
             int mouseX = getCurrentMouseX();
             int newX = mouseX - (GameConst.PaddleWidth / 2);

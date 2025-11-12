@@ -48,14 +48,14 @@ public class ArkanoidController {
         gameLoop = new AnimationTimer() {
             @Override
             public void handle(long l) {
-                GameEngine.handleInput(gameCanvas);
+                GameEngine.getInstance().handleInput(gameCanvas);
                 if (getBall().isBallMoving())
                     gc.clearRect(0, 0, gameCanvas.getWidth(), gameCanvas.getHeight());
 
                 if (getGameState() == 0) {
                     try {
-                        GameEngine.updateGame();
-                        if (GameEngine.isPortalsActive()) {
+                        GameEngine.getInstance().updateGame();
+                        if (GameEngine.getInstance().isPortalsActive()) {
                             Renderer.getInstance().renderPortals();
                         }
 
@@ -63,26 +63,26 @@ public class ArkanoidController {
                         throw new RuntimeException(e);
                     }
 
-                    GameEngine.checkCollision();
+                    GameEngine.getInstance().checkCollision();
                 }
 
                 gc.setFill(Color.rgb(255, 230, 245));
                 gc.setFont(Font.font("Tahoma", FontWeight.BOLD, GameConst.FontSize));
-                gc.fillText(String.format("Level %d", GameEngine.getLevel().getLvl()), 10,
+                gc.fillText(String.format("Level %d", GameEngine.getInstance().getLevel().getLvl()), 10,
                         GameConst.HEIGHT - GameConst.FontSize);
-                gc.fillText(String.format("Live(s): %d", GameEngine.getLives()), 10, GameConst.FontSize);
+                gc.fillText(String.format("Live(s): %d", GameEngine.getInstance().getLives()), 10, GameConst.FontSize);
 
-                if (GameEngine.isArcadeMode()) {
-                    gc.fillText(String.format("Score: %d", GameEngine.getScore()), 350,
+                if (GameEngine.getInstance().isArcadeMode()) {
+                    gc.fillText(String.format("Score: %d", GameEngine.getInstance().getScore()), 350,
                             GameConst.HEIGHT - GameConst.FontSize);
-                    gc.fillText(String.format("High Score: %d", GameEngine.getHighScore()),
+                    gc.fillText(String.format("High Score: %d", GameEngine.getInstance().getHighScore()),
                             560, GameConst.FontSize);
                 }
 
-                if (GameEngine.getLevel().getLvl() > GameEngine.MAX_LEVEL) {
+                if (GameEngine.getInstance().getLevel().getLvl() > GameEngine.getInstance().MAX_LEVEL) {
                     gameLoop.stop();
                     try {
-                        if (GameEngine.getLevel().getLvl() == GameEngine.MAX_LEVEL + 1) {
+                        if (GameEngine.getInstance().getLevel().getLvl() == GameEngine.MAX_LEVEL + 1) {
                             loadWinScreen(); //Arcade Mode
                         } else {
                             loadMainMenu(); //Level Mode

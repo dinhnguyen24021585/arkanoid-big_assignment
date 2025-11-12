@@ -18,12 +18,12 @@ public class WinController {
 
     @FXML
     public void initialize() {
-        GameEngine.setGameState(1);
+        GameEngine.getInstance().setGameState(1);
     }
 
     @FXML
     public void handleReplay() throws IOException, URISyntaxException {
-        GameEngine.startGame();
+        GameEngine.getInstance().startGame();
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/arkanoid/fxmls/arkanoid-view.fxml"));
         Scene gameScene = new Scene(loader.load());

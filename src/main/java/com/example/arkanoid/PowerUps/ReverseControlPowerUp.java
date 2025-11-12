@@ -23,14 +23,14 @@ public class ReverseControlPowerUp extends PowerUp {
 
         effectActive = true;
         startEffectTimer();
-        GameEngine.setReverseControls(true);
+        GameEngine.getInstance().setReverseControls(true);
     }
 
     @Override
     public void removeEffect() {
         if (!effectActive) return;
 
-        GameEngine.setReverseControls(false);
+        GameEngine.getInstance().setReverseControls(false);
         effectActive = false;
         effectStartTime = 0;
     }

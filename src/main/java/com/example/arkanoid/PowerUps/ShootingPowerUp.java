@@ -29,7 +29,7 @@ public class ShootingPowerUp extends PowerUp {
 
     @Override
     public void applyEffect() {
-        ShootingPowerUp currentShooting = GameEngine.getShootingPowerUp();
+        ShootingPowerUp currentShooting = GameEngine.getInstance().getShootingPowerUp();
 
         if (currentShooting != null && currentShooting.isEffectActive()) {
             currentShooting.extendDuration(BASE_DURATION);
@@ -44,7 +44,7 @@ public class ShootingPowerUp extends PowerUp {
         lastShootTime = System.currentTimeMillis();
         totalDuration = BASE_DURATION;
 
-        GameEngine.setShootingPowerUp(this);
+        GameEngine.getInstance().setShootingPowerUp(this);
     }
 
     public void extendDuration(int additionalTime) {
@@ -66,8 +66,8 @@ public class ShootingPowerUp extends PowerUp {
         lastShootTime = 0;
         totalDuration = BASE_DURATION;
 
-        if (GameEngine.getShootingPowerUp() == this) {
-            GameEngine.setShootingPowerUp(null);
+        if (GameEngine.getInstance().getShootingPowerUp() == this) {
+            GameEngine.getInstance().setShootingPowerUp(null);
         }
     }
 
@@ -83,7 +83,7 @@ public class ShootingPowerUp extends PowerUp {
         long currentTime = System.currentTimeMillis();
 
         if (currentTime - lastShootTime >= SHOOT_INTERVAL) {
-            Paddle paddle = GameEngine.getPaddle();
+            Paddle paddle = GameEngine.getInstance().getPaddle();
             if (paddle != null) {
                 createBulletsFromBothSides(paddle);
 
@@ -121,15 +121,15 @@ public class ShootingPowerUp extends PowerUp {
         for (Bullet bullet : bullets) {
             bullet.update();
 
-            for (Brick brick : GameEngine.getBricks()) {
+            for (Brick brick : GameEngine.getInstance().getBricks()) {
                 if (!brick.isDestroyed() && bullet.checkCollision(brick)) {
                     if (!(brick instanceof UnbreakableBrick)) {
                         brick.setDestroyed(true);
                         bricksToRemove.add(brick);
                         bulletsToRemove.add(bullet);
 
-                        GameEngine.setScore(GameEngine.getScore() + brick.getHitPoints() * 10);
-                        GameEngine.getLevel().setNumOfBricksToLvlUp(
+                        GameEngine.getInstance().setScore(GameEngine.getInstance().getScore() + brick.getHitPoints() * 10);
+                        GameEngine.getInstance().getLevel().setNumOfBricksToLvlUp(
                                 GameEngine.getLevel().getNumOfBricksToLvlUp() - 1
                         );
 

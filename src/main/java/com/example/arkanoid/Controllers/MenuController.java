@@ -46,9 +46,9 @@ public class MenuController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/arkanoid/fxmls/arkanoid-view.fxml"));
         gameScene = new Scene(loader.load());
 
-        GameEngine.setArcadeMode(true);
-        GameEngine.getLevel().setLvl(1);
-        GameEngine.startGame();
+        GameEngine.getInstance().setArcadeMode(true);
+        GameEngine.getInstance().getLevel().setLvl(1);
+        GameEngine.getInstance().startGame();
 
         Stage stage = (Stage) btnStart.getScene().getWindow();
         stage.setScene(gameScene);
@@ -56,10 +56,10 @@ public class MenuController {
 
     @FXML
     public void loadGame() throws Exception {
-        GameEngine.loadStateFromFile();
+        GameEngine.getInstance().getInstance().loadStateFromFile();
 //        GameEngine.getPaddle().setPaddleSliding(false);
 //        GameEngine.getBall().setBallMoving(false);
-        GameEngine.setGameState(0);
+        GameEngine.getInstance().setGameState(0);
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/arkanoid/fxmls/arkanoid-view.fxml"));
         MenuController.gameScene = new Scene(loader.load());

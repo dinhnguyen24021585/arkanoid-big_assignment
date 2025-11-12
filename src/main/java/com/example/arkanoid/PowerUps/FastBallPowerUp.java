@@ -16,9 +16,9 @@ public class FastBallPowerUp extends PowerUp {
 
     @Override
     public void applyEffect() {
-        if (GameEngine.getBall() == null || effectActive) return;
+        if (GameEngine.getInstance().getBall() == null || effectActive) return;
 
-        Ball ball = GameEngine.getBall();
+        Ball ball = GameEngine.getInstance().getBall();
         this.currSpeed = ball.getSpeed();
 
         // MAIN BALL
@@ -27,7 +27,7 @@ public class FastBallPowerUp extends PowerUp {
         ball.setDy(ball.getDirectionY() * ball.getSpeed());
 
         // THÊM EXTRA BALLS
-        for (Ball extraBall : GameEngine.getExtraBalls()) {
+        for (Ball extraBall : GameEngine.getInstance().getExtraBalls()) {
             extraBall.setSpeed(currSpeed * 2);
             extraBall.setDx(extraBall.getDirectionX() * extraBall.getSpeed());
             extraBall.setDy(extraBall.getDirectionY() * extraBall.getSpeed());
@@ -41,7 +41,7 @@ public class FastBallPowerUp extends PowerUp {
     public void removeEffect() {
         if (!isEffectActive()) return;
 
-        Ball ball = GameEngine.getBall();
+        Ball ball = GameEngine.getInstance().getBall();
         if (ball != null) {
             ball.setSpeed(GameConst.DefaultSpeed);
             ball.setDx(ball.getDirectionX() * GameConst.DefaultSpeed);

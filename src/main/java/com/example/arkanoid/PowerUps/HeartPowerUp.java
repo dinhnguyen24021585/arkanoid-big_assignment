@@ -16,9 +16,9 @@ public class HeartPowerUp extends PowerUp {
     @Override
     public void applyEffect() {
         if (effectActive) return;
-        if (GameEngine.getLives() < MAX_HEARTS) {
+        if (GameEngine.getInstance().getLives() < MAX_HEARTS) {
 
-            GameEngine.setLives(GameEngine.getLives() + 1);
+            GameEngine.getInstance().setLives(GameEngine.getLives() + 1);
 
             effectActive = true;
         }

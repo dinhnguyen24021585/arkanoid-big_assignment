@@ -27,18 +27,18 @@ public class PauseController {
 
         Stage stage = (Stage) btnContinue.getScene().getWindow();
         stage.setScene(MenuController.gameScene);
-        GameEngine.setGameState(0);
+        GameEngine.getInstance().setGameState(0);
     }
 
     @FXML
     public void replay() throws IOException, URISyntaxException {
-        if (GameEngine.isArcadeMode()) {
-            GameEngine.saveNewHighScore(GameEngine.getScore());
-            GameEngine.getLevel().setLvl(1);
-            GameEngine.setScore(0);
-            GameEngine.startGame();
+        if (GameEngine.getInstance().isArcadeMode()) {
+            GameEngine.getInstance().saveNewHighScore(GameEngine.getInstance().getScore());
+            GameEngine.getInstance().getLevel().setLvl(1);
+            GameEngine.getInstance().setScore(0);
+            GameEngine.getInstance().startGame();
         } else {
-            GameEngine.startGame();
+            GameEngine.getInstance().startGame();
         }
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/arkanoid/fxmls/arkanoid-view.fxml"));

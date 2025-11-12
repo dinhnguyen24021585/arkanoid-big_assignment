@@ -65,13 +65,13 @@ public class ChooseLevelController {
             Button clicked = (Button) event.getSource();
             int level = Integer.parseInt(clicked.getText());
             MenuController.gameScene = new Scene(fxmlLoader.load());
-            GameEngine.setArcadeMode(false);
-            GameEngine.setScore(0);
+            GameEngine.getInstance().setArcadeMode(false);
+            GameEngine.getInstance().setScore(0);
 
-            GameEngine.getLevel().setLvl(level);
+            GameEngine.getInstance().getLevel().setLvl(level);
 
-            GameEngine.startGame();
-            GameEngine.setGameState(0);
+            GameEngine.getInstance().startGame();
+            GameEngine.getInstance().setGameState(0);
             Stage stage = (Stage) gridPane.getScene().getWindow();
             stage.setScene(MenuController.gameScene);
         } catch (IOException | URISyntaxException e) {

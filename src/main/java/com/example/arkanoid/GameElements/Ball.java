@@ -129,13 +129,13 @@ public class Ball extends MovableObject {
     }
 
     private void checkPortalTeleport() {
-        if (!GameEngine.isPortalsActive()) return;
+        if (!GameEngine.getInstance().isPortalsActive()) return;
 
         int ballCenterX = getX() + getWidth()/2;
         int ballCenterY = getY() + getHeight()/2;
 
-        int portalCenterX = GameEngine.getPortal1X() + 40;
-        int portalCenterY = GameEngine.getPortal1Y() + 40;
+        int portalCenterX = GameEngine.getInstance().getPortal1X() + 40;
+        int portalCenterY = GameEngine.getInstance().getPortal1Y() + 40;
 
         double distance = Math.sqrt(
                 Math.pow(ballCenterX - portalCenterX, 2) +

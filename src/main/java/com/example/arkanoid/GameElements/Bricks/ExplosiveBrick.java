@@ -9,7 +9,7 @@ import com.example.arkanoid.GameElements.Sound;
 public class ExplosiveBrick extends Brick {
     public ExplosiveBrick(int x, int y) {
         super(x, y, GameConst.BrickWidth, GameConst.BrickHeight, 1, -1);
-        GameEngine.getLevel().setNumOfBricksToLvlUp(GameEngine.getLevel().getNumOfBricksToLvlUp() + 1);
+        GameEngine.getInstance().getLevel().setNumOfBricksToLvlUp(GameEngine.getInstance().getLevel().getNumOfBricksToLvlUp() + 1);
     }
 
     @Override
@@ -17,7 +17,7 @@ public class ExplosiveBrick extends Brick {
         if (!destroyed) {
             destroyed = true;
             Sound.playSFX("Explosive.wav");
-            explode(GameEngine.getBricks());
+            explode(GameEngine.getInstance().getBricks());
             return hitPoints;
         }
         return 0;

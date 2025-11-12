@@ -27,9 +27,9 @@ public class GameOverController {
 
     @FXML
     public void initialize() {
-        if (GameEngine.isArcadeMode()) {
-            scoreLabel.setText(String.format("SCORE: %d", GameEngine.getScore()));
-            highScoreLabel.setText(String.format("HIGH SCORE: %d", GameEngine.getHighScore()));
+        if (GameEngine.getInstance().isArcadeMode()) {
+            scoreLabel.setText(String.format("SCORE: %d", GameEngine.getInstance().getScore()));
+            highScoreLabel.setText(String.format("HIGH SCORE: %d", GameEngine.getInstance().getHighScore()));
             scoreLabel.setVisible(true);
             highScoreLabel.setVisible(true);
             scoreContainer.setVisible(true);
@@ -45,13 +45,13 @@ public class GameOverController {
 
     @FXML
     public void handleReplay() throws IOException, URISyntaxException {
-        if (GameEngine.isArcadeMode()) {
-            GameEngine.saveNewHighScore(GameEngine.getScore());
-            GameEngine.getLevel().setLvl(1);
-            GameEngine.setScore(0);
+        if (GameEngine.getInstance().isArcadeMode()) {
+            GameEngine.getInstance().saveNewHighScore(GameEngine.getInstance().getScore());
+            GameEngine.getInstance().getLevel().setLvl(1);
+            GameEngine.getInstance().setScore(0);
         }
 
-        GameEngine.startGame();
+        GameEngine.getInstance().startGame();
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/arkanoid/fxmls/arkanoid-view.fxml"));
         Scene gameScene = new Scene(loader.load());
