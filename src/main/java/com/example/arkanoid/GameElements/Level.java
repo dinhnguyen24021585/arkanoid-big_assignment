@@ -26,9 +26,10 @@ public class Level {
     private int[][] isBricksShown = new int[8][10];
     private int numOfBricksToLvlUp;
     private Map<Integer, BrickFactory> brickFactories = new HashMap<>();
-    private Map<Integer,PowerUpFactories> powerFactories = new HashMap<>();
+    private Map<Integer, PowerUpFactories> powerFactories = new HashMap<>();
 
-    public Level() {}
+    public Level() {
+    }
 
     public Level(int lvl) {
         initializeFactories();
@@ -60,13 +61,13 @@ public class Level {
         brickFactories.put(Integer.MAX_VALUE, new UnbreakableBrickFactory());
 
         //power up factory
-        powerFactories.put(1,new ExpandPaddleFactory());
-        powerFactories.put(2,new FastBallFactory());
-        powerFactories.put(3,new HeartFactory());
-        powerFactories.put(4,new MultiBallFactory());
-        powerFactories.put(5,new ShootingFactory());
-        powerFactories.put(6,new ReverseFactory());
-        powerFactories.put(7,new PortalFactory());
+        powerFactories.put(1, new ExpandPaddleFactory());
+        powerFactories.put(2, new FastBallFactory());
+        powerFactories.put(3, new HeartFactory());
+        powerFactories.put(4, new MultiBallFactory());
+        powerFactories.put(5, new ShootingFactory());
+        powerFactories.put(6, new ReverseFactory());
+        powerFactories.put(7, new PortalFactory());
 
     }
 
@@ -112,7 +113,6 @@ public class Level {
                 });
 
                 if (!overlap.get() && powerFactories.containsKey(typeOfPower)) {
-                    System.out.println(typeOfPower);
                     powerUps.add(powerFactories.get(typeOfPower).createPowerUp(x, y));
                 }
             }
