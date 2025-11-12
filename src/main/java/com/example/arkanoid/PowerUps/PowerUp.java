@@ -47,8 +47,11 @@ public abstract class PowerUp extends GameObject {
     }
 
     public void activate() {
-        applyEffect();
-        effectActive = true;
+        // Fix: Sử dụng PowerUpManager thay vì trực tiếp
+        if (PowerUpManager.getInstance().canActivate(this)) {
+            PowerUpManager.getInstance().activatePowerUp(this);
+            effectActive = true;
+        }
     }
 
     public void deactivate() {
@@ -56,6 +59,8 @@ public abstract class PowerUp extends GameObject {
         removeEffect();
         effectActive = false;
         effectStartTime = 0;
+
+        PowerUpManager.getInstance().deactivatePowerUp(this.getClass());
     }
 
     public boolean isActive() {
@@ -94,16 +99,17 @@ public abstract class PowerUp extends GameObject {
             if (checkPaddleCollision(GameEngine.getPaddle())) {
                 Sound.playSFX("Power.wav");
                 activate();
+                active = false;
             }
 
             if (getY() > 600) {
                 active = false;
             }
         }
-        if (effectActive) {
+
+        if (effectActive && duration > 0) {
             if (isEffectExpired()) {
                 deactivate();
-
             }
         }
     }
