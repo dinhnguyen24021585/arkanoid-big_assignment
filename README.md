@@ -116,7 +116,7 @@ Dùng chuột
 ### **Video**
 
 * **Video Gameplay:**
-    ![Video](https://drive.google.com/file/d/1hKXThBcxg01AfHl87atgpUI1oXkp6OtZ/view?usp=drive_link)
+    https://drive.google.com/file/d/1hKXThBcxg01AfHl87atgpUI1oXkp6OtZ/view?fbclid=IwY2xjawOBmrdleHRuA2FlbQIxMABicmlkETFkaUJSSGJ6SjZ2VDNVZlV4c3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHsIKr0LCw7DY9E-CSau3Hv23ETods8qceifbfUGlBtOcA_IJo2ZZGL8jSFhj_aem_Q2QjTjo43_ofGMpWQEIIMA
 
 
 ---
