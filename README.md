@@ -116,7 +116,7 @@ Dùng chuột
 ### **Video**
 
 * **Video Gameplay:**
-    [![Video Demo]()]()
+    ![Video](https://drive.google.com/file/d/1hKXThBcxg01AfHl87atgpUI1oXkp6OtZ/view?usp=drive_link)
 
 
 ---
