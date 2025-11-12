@@ -2,6 +2,7 @@ package com.example.arkanoid.Controllers;
 
 import com.example.arkanoid.GameConst;
 import com.example.arkanoid.GameElements.Renderer;
+import com.example.arkanoid.GameElements.Sound;
 import com.example.arkanoid.GameEngine;
 
 import javafx.animation.AnimationTimer;
@@ -78,6 +79,20 @@ public class ArkanoidController {
                             600, GameConst.FontSize);
                 }
 
+                if (GameEngine.getLevel().getLvl() > GameEngine.MAX_LEVEL) {
+                    gameLoop.stop();
+                    try {
+                        if (GameEngine.getLevel().getLvl() == GameEngine.MAX_LEVEL + 1) {
+                            loadWinScreen(); //Arcade Mode
+                        } else {
+                            loadMainMenu(); //Level Mode
+                        }
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    return;
+                }
+
                 if (GameEngine.gameOver()){
                     gameLoop.stop();
                     try {
@@ -110,5 +125,34 @@ public class ArkanoidController {
         Stage stage = (Stage) gameCanvas.getScene().getWindow();
         stage.setScene(gameOverScene);
         GameEngine.setGameState(1);
+    }
+
+    public void loadMainMenu() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/arkanoid/fxmls/menu.fxml"));
+        Scene menuScene = new Scene(loader.load());
+
+        Stage stage = (Stage) gameCanvas.getScene().getWindow();
+        stage.setScene(menuScene);
+        GameEngine.setGameState(1);
+    }
+
+    public void loadWinScreen() throws IOException {
+        if (gameLoop != null) {
+            gameLoop.stop();
+        }
+
+        Sound.playSFX("win.mp3");
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/arkanoid/fxmls/win.fxml"));
+        Scene winScene = new Scene(loader.load());
+
+        Stage stage = (Stage) gameCanvas.getScene().getWindow();
+        stage.setScene(winScene);
+
+        GameEngine.setGameState(1);
+
+        if (GameEngine.isArcadeMode()) {
+            GameEngine.saveNewHighScore(GameEngine.getScore());
+        }
     }
 }

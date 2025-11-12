@@ -5,6 +5,7 @@ import com.example.arkanoid.GameElements.*;
 
 
 import com.example.arkanoid.PowerUps.*;
+import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 
 import java.io.*;
@@ -28,10 +29,13 @@ public class GameEngine {
     private static int gameState;
     private static boolean arcadeMode = true;
     private static final String highScoreFile = "saveAndLoad/high_score.txt";
+    private static AnimationTimer gameLoop;
     private static ShootingPowerUp shootingPowerUp = null;
     private static boolean reverseControls = false;
     private static boolean portalsActive = false;
     private static int portal1X, portal1Y, portal2X, portal2Y;
+    public static final int MAX_LEVEL = 10;
+
     private static ArrayList<Ball> extraBalls = new ArrayList<>();
 
     private GameEngine() {
@@ -269,7 +273,7 @@ public class GameEngine {
             else {
                 bricktoRemove.add(b);
                 if (isArcadeMode()) {
-                    setScore(getScore() + b.getHitPoints());
+                    setScore(getScore() + b.getHitPoints() * 10);
                 }
                 level.setNumOfBricksToLvlUp(getLevel().getNumOfBricksToLvlUp() - 1);
             }
@@ -333,11 +337,24 @@ public class GameEngine {
 
     public static void levelUp() throws IOException, URISyntaxException {
         if (getLevel().getNumOfBricksToLvlUp() == 0) {
+            if (getLevel().getLvl() >= MAX_LEVEL && isArcadeMode()) {
+                setGameState(1);
+                level.setLvl(MAX_LEVEL + 1); //Arcade Mode
+                System.out.println("WIN");
+                return;
+            }
+
             level.setLvl(getLevel().getLvl() + 1);
 
             extraBalls.clear();
             GameEngine.getBricks().clear();
             GameEngine.getPowerUps().clear();
+
+            if (getLevel().getLvl() > MAX_LEVEL) {
+                level.setLvl(MAX_LEVEL + 2); //Level Mode
+                setGameState(1);
+                return;
+            }
 
             level.loadLevel(GameEngine.getBricks(), GameEngine.getPowerUps());
 
