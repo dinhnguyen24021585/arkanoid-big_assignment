@@ -1,12 +1,13 @@
-package com.example.arkanoid.Bricks;
+package com.example.arkanoid.GameElements.Bricks;
 
-import com.example.arkanoid.GameElements.Brick;
 import com.example.arkanoid.GameConst;
 import com.example.arkanoid.GameElements.Sound;
+import com.example.arkanoid.GameEngine;
 
-public class NormalBrick extends Brick {
-    public NormalBrick(int x, int y) {
-        super(x, y, GameConst.BrickWidth, GameConst.BrickHeight, 1, 1);
+public class StrongBrick extends Brick {
+    public StrongBrick(int x, int y, int hits, int type) {
+        super(x, y, GameConst.BrickWidth, GameConst.BrickHeight, hits, type);
+        GameEngine.getLevel().setNumOfBricksToLvlUp(GameEngine.getLevel().getNumOfBricksToLvlUp() + 1);
     }
 
     @Override

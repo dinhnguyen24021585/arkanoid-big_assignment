@@ -1,9 +1,9 @@
-package com.example.arkanoid.GameElements;
+package com.example.arkanoid.GameElements.Bricks;
 
 import com.example.arkanoid.GameConst;
 
+import com.example.arkanoid.GameElements.Renderer;
 import com.example.arkanoid.GeneralObject.GameObject;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.*;
 
 public abstract class Brick  extends GameObject {

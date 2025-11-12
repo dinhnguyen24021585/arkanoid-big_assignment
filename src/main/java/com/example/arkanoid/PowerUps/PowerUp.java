@@ -93,7 +93,6 @@ public abstract class PowerUp extends GameObject {
 
             if (checkPaddleCollision(GameEngine.getPaddle())) {
                 Sound.playSFX("Power.wav");
-                System.out.println(1);
                 activate();
             }
 

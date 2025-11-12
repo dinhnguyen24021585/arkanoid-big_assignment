@@ -1,13 +1,12 @@
 package com.example.arkanoid.PowerUps;
 
-import com.example.arkanoid.Bricks.UnbreakableBrick;
+import com.example.arkanoid.GameElements.Bricks.UnbreakableBrick;
 import com.example.arkanoid.GameConst;
-import com.example.arkanoid.GameElements.Brick;
+import com.example.arkanoid.GameElements.Bricks.Brick;
 import com.example.arkanoid.GameElements.Bullet;
 import com.example.arkanoid.GameElements.Paddle;
 import com.example.arkanoid.GameElements.Sound;
 import com.example.arkanoid.GameEngine;
-import com.example.arkanoid.PowerUps.PowerUp;
 import javafx.scene.image.Image;
 import java.util.ArrayList;
 

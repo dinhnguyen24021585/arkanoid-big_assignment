@@ -1,9 +1,8 @@
 package com.example.arkanoid.GameElements;
 
-import javax.swing.*;
-
 import com.example.arkanoid.*;
-import com.example.arkanoid.Bricks.UnbreakableBrick;
+import com.example.arkanoid.GameElements.Bricks.Brick;
+import com.example.arkanoid.GameElements.Bricks.UnbreakableBrick;
 import com.example.arkanoid.GeneralObject.MovableObject;
 import com.example.arkanoid.GeneralObject.GameObject;
 import javafx.scene.image.*;

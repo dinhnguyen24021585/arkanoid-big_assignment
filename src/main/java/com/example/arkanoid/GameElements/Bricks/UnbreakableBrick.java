@@ -1,7 +1,6 @@
-package com.example.arkanoid.Bricks;
+package com.example.arkanoid.GameElements.Bricks;
 
 import com.example.arkanoid.GameConst;
-import com.example.arkanoid.GameElements.Brick;
 import com.example.arkanoid.GameElements.Sound;
 
 

@@ -1,37 +1,37 @@
 package com.example.arkanoid.GameElements;
 
 import com.example.arkanoid.*;
+import com.example.arkanoid.GameElements.Bricks.*;
+import com.example.arkanoid.GameElements.Bricks.factories.*;
 import com.example.arkanoid.PowerUps.PortalPowerUp;
 import com.example.arkanoid.PowerUps.BalancedMultiballPowerUp;
-import com.example.arkanoid.Bricks.ExplosiveBrick;
-import com.example.arkanoid.Bricks.NormalBrick;
-import com.example.arkanoid.Bricks.StrongBrick;
-import com.example.arkanoid.Bricks.UnbreakableBrick;
 import com.example.arkanoid.PowerUps.ExpandPaddlePowerUp;
 import com.example.arkanoid.PowerUps.FastBallPowerUp;
 import com.example.arkanoid.PowerUps.HeartPowerUp;
 import com.example.arkanoid.PowerUps.PowerUp;
 import com.example.arkanoid.PowerUps.ReverseControlPowerUp;
 import com.example.arkanoid.PowerUps.ShootingPowerUp;
+import com.example.arkanoid.PowerUps.factories.*;
+import javafx.util.Pair;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Level {
     private int lvl;
     private int[][] isBricksShown = new int[4][10];
     private int numOfBricksToLvlUp;
-    private static boolean[] chooseLevel = new boolean[10];
+    private Map<Integer, BrickFactory> brickFactories = new HashMap<>();
+    private Map<Integer,PowerUpFactories> powerFactories = new HashMap<>();
 
     public Level() {}
 
     public Level(int lvl) {
+        initializeFactories();
         this.lvl = lvl;
     }
 
@@ -51,17 +51,28 @@ public class Level {
         this.numOfBricksToLvlUp = numOfBricksToLvlUp;
     }
 
-    public static boolean[] getChooseLevel() {
-        return chooseLevel;
+    private void initializeFactories() {
+        //brick factory
+        brickFactories.put(1, new NormalBrickFactory());
+        brickFactories.put(2, new StrongBrickFactory());
+        brickFactories.put(3, new StrongBrickFactory());
+        brickFactories.put(-1, new ExplosiveBrickFactory());
+        brickFactories.put(Integer.MAX_VALUE, new UnbreakableBrickFactory());
+
+        //power up factory
+        powerFactories.put(1,new ExpandPaddleFactory());
+        powerFactories.put(2,new FastBallFactory());
+        powerFactories.put(3,new HeartFactory());
+        powerFactories.put(4,new MultiBallFactory());
+        powerFactories.put(5,new ShootingFactory());
+        powerFactories.put(6,new ReverseFactory());
+        powerFactories.put(7,new PortalFactory());
+
     }
 
-    public static void setChooseLevel(boolean[] chooseLevel) {
-        Level.chooseLevel = chooseLevel;
-    }
 
     public void loadLevel(ArrayList<Brick> bricks, ArrayList<PowerUp> powerUps)
             throws IOException, URISyntaxException {
-        System.out.println(this.lvl);
         List<String> lines = Files.readAllLines(Paths.get(getClass().
                 getResource("/com/example/arkanoid/Levels/level" + this.lvl + ".txt").toURI()));
         for (int i = 0; i < lines.size(); i++) {
@@ -75,24 +86,9 @@ public class Level {
 
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 10; j++) {
-                if (isBricksShown[i][j] == 1) {
-                    Brick brick = new NormalBrick(GameConst.BrickWidth * j, 50 + GameConst.BrickHeight * i);
-                    bricks.add(brick);
-                    numOfBricksToLvlUp++;
-                } else if (isBricksShown[i][j] > 1 && isBricksShown[i][j] <= 3) {
-                    Brick brick = new StrongBrick(GameConst.BrickWidth * j, 50 + GameConst.BrickHeight * i,
-                            isBricksShown[i][j], isBricksShown[i][j]);
-                    bricks.add(brick);
-                    numOfBricksToLvlUp++;
-                } else if (isBricksShown[i][j] == -1) {
-                    Brick brick = new ExplosiveBrick(GameConst.BrickWidth * j,
-                            50 + GameConst.BrickHeight * i);
-                    bricks.add(brick);
-                    numOfBricksToLvlUp++;
-                } else if (isBricksShown[i][j] == Integer.MAX_VALUE) {
-                    Brick brick = new UnbreakableBrick(GameConst.BrickWidth * j,
-                            50 + GameConst.BrickHeight * i);
-                    bricks.add(brick);
+                if (brickFactories.containsKey(isBricksShown[i][j])) {
+                    bricks.add(brickFactories.get(isBricksShown[i][j]).createBrick(GameConst.BrickWidth * j,
+                            50 + GameConst.BrickHeight * i, isBricksShown[i][j]));
                 }
             }
         }
@@ -115,27 +111,9 @@ public class Level {
                     }
                 });
 
-                if (typeOfPower == 1 && !overlap.get()) {
-                    PowerUp powerUp = new ExpandPaddlePowerUp(x,y);
-                    powerUps.add(powerUp);
-                } else if (typeOfPower == 2 && !overlap.get()) {
-                    PowerUp powerUp = new FastBallPowerUp(x,y);
-                    powerUps.add(powerUp);
-                } else if(typeOfPower == 3 && !overlap.get()) {
-                    PowerUp powerUp = new HeartPowerUp(x,y);
-                    powerUps.add(powerUp);
-                } else if(typeOfPower == 4 && !overlap.get()) {
-                    PowerUp powerUp = new BalancedMultiballPowerUp(x,y);
-                    powerUps.add(powerUp);
-                } else if (typeOfPower == 5 && !overlap.get()) {
-                    PowerUp powerUp = new ShootingPowerUp(x, y);
-                    powerUps.add(powerUp);
-                } else if (typeOfPower == 6 && !overlap.get()) {
-                    PowerUp powerUp = new ReverseControlPowerUp(x, y);
-                    powerUps.add(powerUp);
-                } else if (typeOfPower == 7 && !overlap.get()) {
-                    PowerUp powerUp = new PortalPowerUp(x, y);
-                    powerUps.add(powerUp);
+                if (!overlap.get() && powerFactories.containsKey(typeOfPower)) {
+                    System.out.println(typeOfPower);
+                    powerUps.add(powerFactories.get(typeOfPower).createPowerUp(x, y));
                 }
             }
         }

@@ -3,6 +3,7 @@ package com.example.arkanoid.GameElements;
 import java.util.Objects;
 
 import com.example.arkanoid.GameConst;
+import com.example.arkanoid.GameElements.Bricks.Brick;
 import com.example.arkanoid.GameEngine;
 import com.example.arkanoid.GeneralObject.GameObject;
 import com.example.arkanoid.PowerUps.*;
@@ -14,7 +15,10 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 public class Renderer {
+    //for Singleton
     private static Renderer instance;
+    private static final Object lock = new Object();
+
     private GraphicsContext gc;
     private Image Bg = null;
     private int currentLevel = -1;
@@ -27,7 +31,12 @@ public class Renderer {
     }
 
     public static Renderer getInstance() {
-        if (instance == null) instance = new Renderer();
+        if (instance == null) {
+            synchronized (lock) {
+                if (instance == null) instance = new Renderer();
+            }
+        }
+
         return instance;
     }
 

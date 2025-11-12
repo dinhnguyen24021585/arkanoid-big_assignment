@@ -1,14 +1,10 @@
 package com.example.arkanoid;
 
-import com.example.arkanoid.Bricks.ExplosiveBrick;
-import com.example.arkanoid.Bricks.NormalBrick;
-import com.example.arkanoid.Bricks.StrongBrick;
-import com.example.arkanoid.Bricks.UnbreakableBrick;
+import com.example.arkanoid.GameElements.Bricks.*;
 import com.example.arkanoid.GameElements.*;
 
 
 import com.example.arkanoid.PowerUps.*;
-import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 
 import java.io.*;
@@ -16,6 +12,10 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 public class GameEngine {
+    //for Singleton
+    private static GameEngine instance;
+    private static Object lock = new Object();
+
     private static Paddle paddle = new Paddle(GameConst.DefaultPaddle_X, GameConst.DefaultPaddle_Y,
             GameConst.PaddleWidth, GameConst.PaddleHeight);
     private static Ball ball = new Ball(GameConst.DefaultBall_X, GameConst.DefaultBall_Y, GameConst.BallRadius,
@@ -28,15 +28,22 @@ public class GameEngine {
     private static int gameState;
     private static boolean arcadeMode = true;
     private static final String highScoreFile = "saveAndLoad/high_score.txt";
-    private static AnimationTimer gameLoop;
     private static ShootingPowerUp shootingPowerUp = null;
     private static boolean reverseControls = false;
     private static boolean portalsActive = false;
     private static int portal1X, portal1Y, portal2X, portal2Y;
-
     private static ArrayList<Ball> extraBalls = new ArrayList<>();
 
-    public GameEngine() {
+    private GameEngine() {
+    }
+
+    public static GameEngine getInstance() {
+        if (instance == null) {
+            synchronized (lock) {
+                if (instance == null) instance = new GameEngine();
+            }
+        }
+        return instance;
     }
 
     public GameEngine(Paddle paddle, Ball ball) {
@@ -248,8 +255,8 @@ public class GameEngine {
             powerUp.render();
 
             if (powerUp.isEffectExpired() ||
-                    (powerUp instanceof HeartPowerUp && powerUp.checkPaddleCollision(paddle)) ||
-                    (powerUp.isEffectActive() && powerUp.isEffectExpired())) {
+                    (powerUp instanceof HeartPowerUp || powerUp instanceof BalancedMultiballPowerUp)
+                            && powerUp.checkPaddleCollision(paddle)) {
                 powerUpsToRemove.add(powerUp);
             }
         });

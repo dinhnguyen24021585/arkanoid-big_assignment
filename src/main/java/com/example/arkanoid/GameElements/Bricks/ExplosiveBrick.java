@@ -1,16 +1,15 @@
-package com.example.arkanoid.Bricks;
+package com.example.arkanoid.GameElements.Bricks;
 
 
 import java.util.ArrayList;
 
 import com.example.arkanoid.*;
-import com.example.arkanoid.GameElements.Brick;
 import com.example.arkanoid.GameElements.Sound;
-import javafx.scene.image.Image;
 
 public class ExplosiveBrick extends Brick {
     public ExplosiveBrick(int x, int y) {
         super(x, y, GameConst.BrickWidth, GameConst.BrickHeight, 1, -1);
+        GameEngine.getLevel().setNumOfBricksToLvlUp(GameEngine.getLevel().getNumOfBricksToLvlUp() + 1);
     }
 
     @Override

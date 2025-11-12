@@ -5,6 +5,7 @@ module com.example.arkanoid {
     requires jdk.jfr;
     requires javafx.graphics;
     requires javafx.media;
+    //requires com.example.arkanoid;
 
 
 //    requires com.dlsc.formsfx;
