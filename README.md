@@ -37,7 +37,7 @@
 
 ### **Sơ đồ Lớp (Class Diagram)**
 
-
+![UML](https://github.com/dinhnguyen24021585/arkanoid-big_assignment/blob/f1009faf55380ef9e883550b2f26c8fba8a1d646/uml/arkanoid.png?raw=true)
 
 ---
 ## **⚙️ Triển khai Mẫu thiết kế**
@@ -131,13 +131,10 @@ Dùng chuột
 ### **2. Cải thiện Gameplay**
 
 * Thêm các trận **Boss Battles** ở cuối mỗi "thế giới".
-* Bổ sung đa dạng Power-ups mới (Ví dụ: đóng băng thời gian, tạo tường chắn bảo vệ, v.v.).
 * Triển khai **Hệ thống thành tích (Achievements system)**.
 
 ### **3. Cải tiến Kỹ thuật**
 
-* Chuyển đổi sang thư viện **LibGDX** hoặc **JavaFX** để nâng cao chất lượng đồ họa.
-* Thêm hiệu ứng hạt (**particle effects**) và các hoạt ảnh nâng cao.
 * Triển khai chế độ đối thủ AI (AI opponent mode).
 * Thêm bảng xếp hạng trực tuyến (**online leaderboard**) sử dụng database backend.
 
