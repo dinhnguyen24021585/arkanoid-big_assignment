@@ -2,8 +2,6 @@ package com.example.arkanoid;
 
 import com.example.arkanoid.GameElements.Bricks.*;
 import com.example.arkanoid.GameElements.*;
-
-
 import com.example.arkanoid.PowerUps.*;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
@@ -17,10 +15,8 @@ public class GameEngine {
     private static GameEngine instance;
     private static Object lock = new Object();
 
-    private static Paddle paddle = new Paddle(GameConst.DefaultPaddle_X, GameConst.DefaultPaddle_Y,
-            GameConst.PaddleWidth, GameConst.PaddleHeight);
-    private static Ball ball = new Ball(GameConst.DefaultBall_X, GameConst.DefaultBall_Y, GameConst.BallRadius,
-            GameConst.BallRadius, GameConst.DefaultSpeed, GameConst.DefaultDir_X, GameConst.DefaultDir_Y);
+    private static Paddle paddle = new Paddle(GameConst.DefaultPaddle_X, GameConst.DefaultPaddle_Y, GameConst.PaddleWidth, GameConst.PaddleHeight);
+    private static Ball ball = new Ball(GameConst.DefaultBall_X, GameConst.DefaultBall_Y, GameConst.BallRadius, GameConst.BallRadius, GameConst.DefaultSpeed, GameConst.DefaultDir_X, GameConst.DefaultDir_Y);
     private static ArrayList<Brick> bricks = new ArrayList<Brick>();
     private static ArrayList<PowerUp> powerUps = new ArrayList<PowerUp>();
     private static Level level = new Level(1);
@@ -32,8 +28,6 @@ public class GameEngine {
     private static AnimationTimer gameLoop;
     private static ShootingPowerUp shootingPowerUp = null;
     private static boolean reverseControls = false;
-    private static boolean portalsActive = false;
-    private static int portal1X, portal1Y, portal2X, portal2Y;
     public static final int MAX_LEVEL = 10;
 
     private static ArrayList<Ball> extraBalls = new ArrayList<>();
@@ -41,22 +35,12 @@ public class GameEngine {
     private GameEngine() {
     }
 
-    public static GameEngine getInstance() {
-        if (instance == null) {
-            synchronized (lock) {
-                if (instance == null) instance = new GameEngine();
-            }
-        }
-        return instance;
-    }
-
     public GameEngine(Paddle paddle, Ball ball) {
         GameEngine.paddle = paddle;
         GameEngine.ball = ball;
     }
 
-    public GameEngine(Paddle paddle, Ball ball, ArrayList<Brick> bricks,
-                      ArrayList<PowerUp> powerUps, int score, int lives, int gameState, Level level) {
+    public GameEngine(Paddle paddle, Ball ball, ArrayList<Brick> bricks, ArrayList<PowerUp> powerUps, int score, int lives, int gameState, Level level) {
         GameEngine.paddle = paddle;
         GameEngine.ball = ball;
         GameEngine.bricks = bricks;
@@ -69,10 +53,6 @@ public class GameEngine {
 
     public static Paddle getPaddle() {
         return paddle;
-    }
-
-    public static void setPaddle(Paddle paddle) {
-        GameEngine.paddle = paddle;
     }
 
     public static Ball getBall() {
@@ -151,18 +131,25 @@ public class GameEngine {
         GameEngine.reverseControls = reverse;
     }
 
-    public static boolean isPortalsActive() { return portalsActive; }
-    public static void setPortals(int x1, int y1, int x2, int y2) {
-        portal1X = x1; portal1Y = y1;
-        portal2X = x2; portal2Y = y2;
-        portalsActive = true;
+    public static boolean isPortalsActive() {
+        return PortalPowerUp.isPortalsActive();
     }
-    public static void disablePortals() { portalsActive = false; }
 
-    public static int getPortal1X() { return portal1X; }
-    public static int getPortal1Y() { return portal1Y; }
-    public static int getPortal2X() { return portal2X; }
-    public static int getPortal2Y() { return portal2Y; }
+    public static void setPortals(int x1, int y1) {
+        PortalPowerUp.setPortals(x1, y1);
+    }
+
+    public static void disablePortals() {
+        PortalPowerUp.disablePortals();
+    }
+
+    public static int getPortal1X() {
+        return PortalPowerUp.getPortal1X();
+    }
+
+    public static int getPortal1Y() {
+        return PortalPowerUp.getPortal1Y();
+    }
 
     public static ShootingPowerUp getShootingPowerUp() {
         return shootingPowerUp;
@@ -172,12 +159,8 @@ public class GameEngine {
         GameEngine.shootingPowerUp = powerUp;
     }
 
-    public static void addExtraBalls(ArrayList<Ball> balls) {
-        extraBalls.addAll(balls);
-    }
-
-    public static void removeExtraBall(Ball ball) {
-        extraBalls.remove(ball);
+    public static void updatePowerUps() {
+        PowerUpManager.getInstance().update();
     }
 
     public static void startGame() throws IOException, URISyntaxException {
@@ -208,6 +191,8 @@ public class GameEngine {
         GameEngine.getPowerUps().clear();
         extraBalls.clear();
 
+        PowerUpManager.getInstance().clearAllPowerUps();
+
         GameEngine.level.setLvl(level.getLvl());
         GameEngine.getLevel().setNumOfBricksToLvlUp(0);
         level.loadLevel(GameEngine.getBricks(), GameEngine.getPowerUps());
@@ -221,8 +206,9 @@ public class GameEngine {
         // setGameState(1);
     }
 
-    public static void updateGame() throws IOException, URISyntaxException, InterruptedException  {
+    public static void updateGame() throws IOException, URISyntaxException, InterruptedException {
         Renderer.getInstance().renderBackground();
+        updatePowerUps();
 
         if (paddle.isPaddleSliding()) {
             paddle.update();
@@ -242,7 +228,7 @@ public class GameEngine {
             }
         }
 
-        if (portalsActive) {
+        if (isPortalsActive()) {
             Renderer.getInstance().renderPortals();
         }
 
@@ -258,9 +244,7 @@ public class GameEngine {
             powerUp.update();
             powerUp.render();
 
-            if (powerUp.isEffectExpired() ||
-                    (powerUp instanceof HeartPowerUp || powerUp instanceof BalancedMultiballPowerUp)
-                            && powerUp.checkPaddleCollision(paddle)) {
+            if (powerUp.isEffectExpired() || (powerUp instanceof HeartPowerUp || powerUp instanceof BalancedMultiballPowerUp) && powerUp.checkPaddleCollision(paddle)) {
                 powerUpsToRemove.add(powerUp);
             }
         });
@@ -281,8 +265,13 @@ public class GameEngine {
 
         bricktoRemove.forEach(brick -> {
             powerUps.forEach(powerUp -> {
-                if (powerUp.getX() - brick.getX() == 25 && brick.getY() == powerUp.getY()) {
+                int diffX = powerUp.getX() - brick.getX();
+                int diffY = powerUp.getY() - brick.getY();
+
+                if (diffX == 25 && brick.getY() == powerUp.getY()) {
                     powerUp.setActive(true);
+                } else {
+                    System.out.println(" Condition not met - Expected diffX=25, got: " + diffX);
                 }
             });
         });
@@ -299,17 +288,17 @@ public class GameEngine {
             gameState = 0;
         });
         gameCanvas.setOnMouseMoved(MouseEvent -> {
-            if (MouseEvent.getX() - paddle.getWidth() / 2 >= 0
-                    && MouseEvent.getX() + paddle.getWidth() / 2 < gameCanvas.getWidth() && gameState == 0) {
+            if (MouseEvent.getX() - paddle.getWidth() / 2 >= 0 && MouseEvent.getX() + paddle.getWidth() / 2 < gameCanvas.getWidth() && gameState == 0) {
                 if (paddle.isPaddleSliding()) {
-                    int targetX = (int) MouseEvent.getX() - GameConst.PaddleWidth / 2;
 
-                    // ĐẢO NGƯỢC ĐIỀU KHIỂN :)))
+                    int currentPaddleWidth = paddle.getWidth(); // dùng width thực tế
+                    int targetX = (int) MouseEvent.getX() - currentPaddleWidth / 2;
+
+                    // ĐẢO NGƯỢC ĐIỀU KHIỂN
                     if (reverseControls) {
-                        // Di chuyển chuột sang TRÁI → paddle sang PHẢI và ngược lại
                         int screenCenter = GameConst.WIDTH / 2;
                         int distanceFromCenter = (int) MouseEvent.getX() - screenCenter;
-                        targetX = screenCenter - distanceFromCenter - GameConst.PaddleWidth / 2;
+                        targetX = screenCenter - distanceFromCenter - currentPaddleWidth / 2; // currentPaddleWidth
                     }
 
                     paddle.setX(targetX);
@@ -345,10 +334,10 @@ public class GameEngine {
             }
 
             level.setLvl(getLevel().getLvl() + 1);
-
             extraBalls.clear();
             GameEngine.getBricks().clear();
             GameEngine.getPowerUps().clear();
+            PowerUpManager.getInstance().clearAllPowerUps();
 
             if (getLevel().getLvl() > MAX_LEVEL) {
                 level.setLvl(MAX_LEVEL + 2); //Level Mode
@@ -357,7 +346,6 @@ public class GameEngine {
             }
 
             level.loadLevel(GameEngine.getBricks(), GameEngine.getPowerUps());
-
             setGameState(1);
 
             paddle.setX(GameConst.DefaultPaddle_X);
@@ -392,7 +380,6 @@ public class GameEngine {
         for (Ball extraBall : extraBalls) {
             if (extraBall.getY() >= 525 && extraBall.isBallMoving()) {
                 lostExtraBalls.add(extraBall);
-                System.out.println("Extra ball lost");
             }
         }
         extraBalls.removeAll(lostExtraBalls);
@@ -422,6 +409,8 @@ public class GameEngine {
             GameEngine.disablePortals();
             setReverseControls(false);
 
+            PowerUpManager.getInstance().clearAllPowerUps();
+
             Renderer.getInstance().renderBackground();
             bricks.forEach(b -> {
                 if (!b.isDestroyed()) b.render();
@@ -445,6 +434,9 @@ public class GameEngine {
             shootingPowerUp = null;
             GameEngine.disablePortals();
             setReverseControls(false);
+
+            PowerUpManager.getInstance().clearAllPowerUps();
+
             level.setNumOfBricksToLvlUp(0);
             return true;
         }
@@ -462,20 +454,15 @@ public class GameEngine {
             writer.println("ball=" + ball.getX() + "," + ball.getY() + "," + ball.isBallMoving());
 
             for (Brick b : bricks) {
-                writer.println("brick=" + b.getClass().getSimpleName() + "," +
-                        b.getX() + "," + b.getY() + "," + b.isDestroyed() + "," +
-                        b.getHitPoints() + "," + b.getType());
+                writer.println("brick=" + b.getClass().getSimpleName() + "," + b.getX() + "," + b.getY() + "," + b.isDestroyed() + "," + b.getHitPoints() + "," + b.getType());
             }
 
             for (PowerUp p : powerUps) {
-                writer.println("powerup=" + p.getClass().getSimpleName() + ","
-                        + p.getX() + "," + p.getY() + "," + p.isActive());
+                writer.println("powerup=" + p.getClass().getSimpleName() + "," + p.getX() + "," + p.getY() + "," + p.isActive());
             }
 
             for (Ball ball : extraBalls) {
-                writer.println("extraball=" + ball.getX() + "," + ball.getY() + "," +
-                        ball.isBallMoving() + "," + ball.getDirectionX() + "," +
-                        ball.getDirectionY());
+                writer.println("extraball=" + ball.getX() + "," + ball.getY() + "," + ball.isBallMoving() + "," + ball.getDirectionX() + "," + ball.getDirectionY());
             }
 
         } catch (IOException e) {
@@ -490,6 +477,9 @@ public class GameEngine {
             extraBalls.clear();
             GameEngine.getLevel().setNumOfBricksToLvlUp(0);
             GameEngine.disablePortals();
+
+            // THÊM CLEAR POWER-UPS KHI LOAD STATE
+            PowerUpManager.getInstance().clearAllPowerUps();
 
             String line;
             while ((line = reader.readLine()) != null) {
@@ -535,9 +525,7 @@ public class GameEngine {
                             default -> null;
                         };
 
-                        if (!(b instanceof UnbreakableBrick)) {
-                            GameEngine.getLevel().setNumOfBricksToLvlUp(getLevel().getNumOfBricksToLvlUp() + 1);
-                        }
+                        GameEngine.getLevel().setNumOfBricksToLvlUp(getLevel().getNumOfBricksToLvlUp() + 1);
 
                         if (b != null) {
                             b.setDestroyed(destroyed);
@@ -567,15 +555,7 @@ public class GameEngine {
 
                     case "extraball" -> {
                         String[] vals = value.split(",");
-                        Ball extraBall = new Ball(
-                                Integer.parseInt(vals[0]),
-                                Integer.parseInt(vals[1]),
-                                GameConst.BallRadius,
-                                GameConst.BallRadius,
-                                GameConst.DefaultSpeed,
-                                Integer.parseInt(vals[3]),
-                                Integer.parseInt(vals[4])
-                        );
+                        Ball extraBall = new Ball(Integer.parseInt(vals[0]), Integer.parseInt(vals[1]), GameConst.BallRadius, GameConst.BallRadius, GameConst.DefaultSpeed, Integer.parseInt(vals[3]), Integer.parseInt(vals[4]));
                         extraBall.setBallMoving(Boolean.parseBoolean(vals[2]));
                         extraBalls.add(extraBall);
                     }
